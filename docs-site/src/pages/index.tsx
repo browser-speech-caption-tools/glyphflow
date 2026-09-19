@@ -12,11 +12,11 @@ export default function Home(): JSX.Element {
       <main>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>Browser-native speech captions</p>
-            <h1>Text that keeps up with speech.</h1>
+            <p className={styles.eyebrow}>Web Speech API + text animation</p>
+            <h1>Animate text as the browser speaks.</h1>
             <p className={styles.lede}>
-              GlyphFlow speaks text with the Web Speech API and smoothly fills each
-              caption word from left to right as it is spoken.
+              GlyphFlow connects browser speech synthesis to a smooth, word-by-word
+              text wipe. Each spoken word fills from left to right in real time.
             </p>
             <div className={styles.actions}>
               <Link className={styles.primaryAction} to="/docs/getting-started">
@@ -32,11 +32,11 @@ export default function Home(): JSX.Element {
           </div>
 
           <div className={styles.preview} aria-label="Animated caption preview">
-            <span className={styles.previewLabel}>Animated text wipe</span>
+            <span className={styles.previewLabel}>Speech-driven text animation</span>
             <p className={styles.caption} aria-hidden="true">
-              <span className={`${styles.word} ${styles.wordOne}`}>Read</span>{" "}
-              <span className={`${styles.word} ${styles.wordTwo}`}>with</span>{" "}
-              <span className={`${styles.word} ${styles.wordThree}`}>flow.</span>
+              <span className={`${styles.word} ${styles.wordOne}`}>Speech</span>{" "}
+              <span className={`${styles.word} ${styles.wordTwo}`}>drives</span>{" "}
+              <span className={`${styles.word} ${styles.wordThree}`}>text.</span>
             </p>
             <p className={styles.previewNote}>
               A visual preview. Actual timing follows browser word-boundary events.

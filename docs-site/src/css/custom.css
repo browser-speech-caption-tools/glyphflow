@@ -1,8 +1,55 @@
 :root {
-  --ifm-color-primary: #4e6cff;
-  --ifm-color-primary-dark: #3456ff;
-  --ifm-color-primary-light: #718aff;
+  --ifm-color-primary: #4d63e9;
+  --ifm-color-primary-dark: #354cd4;
+  --ifm-color-primary-light: #6b7ef4;
   --ifm-code-font-size: 95%;
+  --ifm-navbar-background-color: #fff;
+  --gf-heading: #161b2b;
+  --gf-muted: #525d73;
+  --gf-border: #dbe0ec;
+  --gf-border-strong: #aeb8cd;
+  --gf-surface-hover: #f5f7ff;
+  --gf-code-background: #f4f6fb;
+  --gf-accent-shadow: #4d63e940;
+  --gf-preview-background: #fff;
+  --gf-preview-border: #b8c3f8;
+  --gf-preview-glow: #9caeff66;
+  --gf-preview-orb: #d8e0ff;
+  --gf-preview-shadow: #2634641f;
+  --gf-wipe-highlight: #263dca;
+  --gf-wipe-muted: #97a1b6;
+  --gf-timeline-muted: #d6dce9;
+  --gf-card-background: #fff;
+  --gf-icon-background: #edf0ff;
+  --gf-callout-background: #f4f6ff;
+}
+
+[data-theme="dark"] {
+  --ifm-color-primary: #9eafff;
+  --ifm-color-primary-dark: #8196ff;
+  --ifm-color-primary-light: #bdc7ff;
+  --ifm-background-color: #10131d;
+  --ifm-background-surface-color: #171c29;
+  --ifm-navbar-background-color: #10131df2;
+  --ifm-font-color-base: #e8ebf5;
+  --gf-heading: #f5f6fc;
+  --gf-muted: #b5bdd0;
+  --gf-border: #30394e;
+  --gf-border-strong: #56627e;
+  --gf-surface-hover: #20283b;
+  --gf-code-background: #171c29;
+  --gf-accent-shadow: #9eafff2e;
+  --gf-preview-background: #171c29;
+  --gf-preview-border: #5568c9;
+  --gf-preview-glow: #6579ff3b;
+  --gf-preview-orb: #26336e;
+  --gf-preview-shadow: #0000004d;
+  --gf-wipe-highlight: #dfe4ff;
+  --gf-wipe-muted: #74809a;
+  --gf-timeline-muted: #39445c;
+  --gf-card-background: #161b27;
+  --gf-icon-background: #252e52;
+  --gf-callout-background: #171d30;
 }
 
 .hero {

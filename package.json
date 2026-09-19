@@ -1,8 +1,9 @@
 {
-  "name": "karaoke-narrator",
+  "name": "@enumura1/glyphflow",
   "version": "0.1.0",
   "description": "Browser Web Speech narration with smoothly wiping karaoke captions.",
   "license": "MIT",
+  "publishConfig": { "access": "public" },
   "type": "module",
   "sideEffects": ["./dist/styles.css"],
   "main": "./dist/index.js",

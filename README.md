@@ -9,6 +9,7 @@
 - Uses only the browser's `speechSynthesis`; no audio files, network, storage, or AI models.
 - Wipes inside each word with CSS gradients rather than flipping whole-word colors.
 - Learns timing from observed word boundaries during a narration session.
+- Includes short punctuation and line-break pauses in its initial estimates.
 - Plain TypeScript DOM API: no React or Vue dependency, and SSR-safe imports.
 
 ## Install
@@ -46,6 +47,8 @@ The library only sets `--kn-progress` inline. Override its appearance normally:
 ## States and events
 
 `onStateChange` receives `idle`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. `unsupported` includes missing Web Speech support and voices that finish without usable word-boundary events. `onWordTiming` receives measured timing samples and current diagnostics. Use `getSpeechSynthesisSupport()` before creating UI; `getVoices()` safely returns an empty list until the browser populates voices (listen for `voiceschanged` in application UI).
+
+Timing samples require two consecutive word boundaries. The final word therefore has no measured sample; it is completed when speech ends. A skipped boundary also produces no sample for that interval.
 
 ## Browser support
 

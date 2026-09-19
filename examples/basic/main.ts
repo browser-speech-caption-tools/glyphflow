@@ -79,7 +79,7 @@ byId<HTMLButtonElement>("download").onclick = () => {
   );
   const link = document.createElement("a");
   link.href = url;
-  link.download = "karaoke-narrator-diagnostics.json";
+  link.download = "glyphflow-diagnostics.json";
   link.click();
   URL.revokeObjectURL(url);
 };

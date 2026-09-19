@@ -1,4 +1,4 @@
-# karaoke-narrator plan
+# GlyphFlow plan
 
 ## Public API
 

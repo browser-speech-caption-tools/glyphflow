@@ -1,4 +1,4 @@
-# karaoke-narrator
+# GlyphFlow
 
 **A zero-runtime-dependency browser library that speaks English text with Web Speech API while smoothly wiping each caption word from left to right.**
 
@@ -15,12 +15,12 @@
 ## Install
 
 ```sh
-npm install karaoke-narrator
+npm install @enumura1/glyphflow
 ```
 
 ```ts
-import { createKaraokeNarrator } from "karaoke-narrator";
-import "karaoke-narrator/styles.css";
+import { createKaraokeNarrator } from "@enumura1/glyphflow";
+import "@enumura1/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a karaoke caption.",

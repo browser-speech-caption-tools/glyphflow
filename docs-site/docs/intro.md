@@ -1,6 +1,7 @@
 ---
 sidebar_position: 1
 title: GlyphFlow
+slug: /
 ---
 
 GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with the browser Web Speech API while wiping each caption word from left to right.

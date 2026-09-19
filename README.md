@@ -92,4 +92,4 @@ The contributor documentation site lives in `docs-site/`. Run `npm run docs:inst
 
 ## License
 
-MIT
+[MIT](./LICENSE)

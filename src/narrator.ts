@@ -20,13 +20,13 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   speak(): void {
     if (this.destroyed) return; this.stop(false); const support = this.driver.supported();
     if (!support.supported) { this.setState("unsupported", support.reason); return; }
-    const id = ++this.session; this.predictor = new TimingPredictor(); this.samples = []; this.boundaries = 0; this.active = -1; this.renderer.render(this.tokens, this.options.text); this.setState("speaking");
+    const id = ++this.session; this.predictor = new TimingPredictor(); this.samples = []; this.boundaries = 0; this.active = -1; this.boundaryElapsed = 0; this.pausedMs = 0; this.renderer.render(this.tokens, this.options.text); this.setState("speaking");
     this.driver.speak(this.options.text, { voice: this.options.voice, lang: this.options.lang, rate: this.rate, pitch: this.options.pitch ?? 1, volume: this.options.volume ?? 1 }, { boundary: (event) => this.onBoundary(id, event), end: () => this.onEnd(id), error: (reason) => { if (id === this.session) { this.stop(false); this.setState("error", reason); } } });
   }
   private onBoundary(id: number, event: { charIndex: number; elapsedTime: number; name?: string }): void {
-    if (id !== this.session || this.destroyed || this.state !== "speaking" || (event.name && event.name !== "word")) return;
+    if (id !== this.session || this.destroyed || this.state !== "speaking" || (event.name && event.name !== "word") || !Number.isInteger(event.charIndex) || !Number.isFinite(event.elapsedTime)) return;
     const index = findTokenIndex(this.tokens, event.charIndex); if (index < 0 || index <= this.active) return;
-    const elapsed = event.elapsedTime * 1000; this.boundaries++;
+    const elapsed = event.elapsedTime * 1000; if (elapsed < this.boundaryElapsed) return; this.boundaries++;
     if (this.active >= 0) { const previous = this.tokens[this.active]; if (previous) { if (index === this.active + 1) { const actual = elapsed - this.boundaryElapsed; const sample: WordTimingSample = { index: this.active, word: previous.text, charIndex: previous.start, predictedMs: this.predicted, actualMs: actual, errorMs: actual - this.predicted, absoluteErrorMs: Math.abs(actual - this.predicted), boundaryElapsedMs: this.boundaryElapsed }; this.predictor.observe(previous, actual, this.rate); this.samples.push(sample); this.options.onWordTiming?.(sample, this.diagnostics()); } for (let completed = this.active; completed < index; completed++) this.renderer.complete(completed); } }
     this.active = index; this.boundaryElapsed = elapsed; this.boundaryAt = now(); this.pausedMs = 0; const token = this.tokens[index]; if (token) this.predicted = this.predictor.predict(token, this.rate); this.renderer.progress(index, 0); this.animate(id);
   }

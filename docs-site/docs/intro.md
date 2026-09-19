@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
-title: GlyphFlow
+title: Introduction
 slug: /
 hide_table_of_contents: true
 ---
 
 <div className="hero">
 
-# Speech-aware captions for the browser
+# GlyphFlow documentation
 
 GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with the Web Speech API and fills each caption word from left to right as it is spoken.
 

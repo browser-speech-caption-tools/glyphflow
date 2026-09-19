@@ -13,8 +13,8 @@ const config: Config = {
     navbar: {
       title: "GlyphFlow",
       items: [
-        { to: "/", label: "Docs", position: "left" },
-        { to: "/getting-started", label: "Get started", position: "left" },
+        { to: "/docs", label: "Docs", position: "left" },
+        { to: "/docs/getting-started", label: "Get started", position: "left" },
         {
           href: "https://github.com/enumura1/glyphflow",
           label: "GitHub",
@@ -28,16 +28,16 @@ const config: Config = {
         {
           title: "Documentation",
           items: [
-            { label: "Get started", to: "/getting-started" },
-            { label: "API", to: "/api" },
-            { label: "Browser support", to: "/browser-support" },
+            { label: "Get started", to: "/docs/getting-started" },
+            { label: "API", to: "/docs/api" },
+            { label: "Browser support", to: "/docs/browser-support" },
           ],
         },
         {
           title: "Project",
           items: [
             { label: "GitHub", href: "https://github.com/enumura1/glyphflow" },
-            { label: "Project scope", to: "/project-scope" },
+            { label: "Project scope", to: "/docs/project-scope" },
           ],
         },
       ],
@@ -48,7 +48,7 @@ const config: Config = {
     [
       "classic",
       {
-        docs: { routeBasePath: "/" },
+        docs: { routeBasePath: "/docs" },
         blog: false,
         theme: { customCss: "./src/css/custom.css" },
       },

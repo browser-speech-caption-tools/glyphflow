@@ -20,4 +20,9 @@ describe("tokenize", () => {
     expect(findTokenIndex(tokens, 3)).toBe(1);
     expect(findTokenIndex(tokens, 6)).toBe(2);
   });
+  it("locates words near the end of a long sentence", () => {
+    const tokens = tokenize(Array(10_000).fill("word").join(" "));
+    expect(findTokenIndex(tokens, tokens[9_999]!.start)).toBe(9_999);
+    expect(findTokenIndex(tokens, tokens[5_000]!.end)).toBe(5_001);
+  });
 });

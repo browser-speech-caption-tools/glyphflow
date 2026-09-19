@@ -50,10 +50,12 @@ export function findTokenIndex(
   charIndex: number,
 ): number {
   if (!tokens.length) return -1;
-  const exact = tokens.findIndex(
-    (token) => charIndex >= token.start && charIndex < token.end,
-  );
-  if (exact >= 0) return exact;
-  const next = tokens.findIndex((token) => token.start >= charIndex);
-  return next >= 0 ? next : tokens.length - 1;
+  let low = 0;
+  let high = tokens.length;
+  while (low < high) {
+    const middle = Math.floor((low + high) / 2);
+    if (tokens[middle]!.end <= charIndex) low = middle + 1;
+    else high = middle;
+  }
+  return Math.min(low, tokens.length - 1);
 }

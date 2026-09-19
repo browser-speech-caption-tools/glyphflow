@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsup && cp src/styles.css dist/styles.css",
     "lint": "eslint .",
+    "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" tsup.config.ts eslint.config.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "demo": "vite --config examples/basic/vite.config.ts"

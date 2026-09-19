@@ -49,7 +49,17 @@ The library only sets `--kn-progress` inline. Override its appearance normally:
 
 ## Browser support
 
-The supported starting point is Chrome Desktop, English text, and a voice that emits `word` boundary events. Web Speech API behavior varies by browser, OS, installed voice, and language. Manually verify your chosen voice, including pause/resume, repeated words, punctuation, and a 1.60 rate, using `npm run demo`.
+The supported starting point is Chrome Desktop, English text, and a voice that emits `word` boundary events. Web Speech API behavior varies by browser, OS, installed voice, and language. Real voice output cannot be established by the automated tests.
+
+To verify a voice manually, run `npm run demo` in Chrome Desktop, select an English voice, and:
+
+1. Play the default sentence at rate 1.6. Confirm the highlight moves through the inside of each character and each word completes at the next boundary.
+2. Pause mid-word, wait, then resume. Confirm the wipe stays still during the pause and does not jump after resume.
+3. Try `go go go`, punctuation, multiple spaces, and a line break. Confirm repeated words track separately and spacing is preserved.
+4. Speak again while audio is active, then cancel. Confirm callbacks from the first session do not change the new display.
+5. Check the status line and timing table. A voice that provides no usable word boundaries should report `unsupported` after playback ends.
+
+The initial Chrome voice and OS combination has not yet been verified in this repository. Record the voice name, OS, browser version, and observations before claiming a compatibility result.
 
 ## Limitations
 
@@ -60,6 +70,7 @@ This is not an audio-file synchronization or forced-alignment library. It cannot
 ```sh
 npm install
 npm run lint
+npm run format:check
 npm test
 npm run build
 npm run demo

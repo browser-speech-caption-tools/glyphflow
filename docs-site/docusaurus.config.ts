@@ -3,15 +3,22 @@ import type { Config } from "@docusaurus/types";
 const config: Config = {
   title: "GlyphFlow",
   tagline: "Web Speech captions with a smooth word wipe",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.svg",
   url: "https://enumura1.github.io",
   baseUrl: "/glyphflow/",
   organizationName: "enumura1",
   projectName: "glyphflow",
   onBrokenLinks: "throw",
   themeConfig: {
+    image: "img/ogp.png",
     navbar: {
       title: "GlyphFlow",
+      logo: {
+        alt: "GlyphFlow",
+        src: "img/favicon.svg",
+        width: 28,
+        height: 28,
+      },
       items: [
         { to: "/docs", label: "Docs", position: "left" },
         { to: "/docs/getting-started", label: "Get started", position: "left" },

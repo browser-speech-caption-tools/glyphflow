@@ -137,8 +137,15 @@ export default function LiveDemo(): JSX.Element {
     narratorRef.current.speak();
   }
 
-  const latest = metrics.samples.at(-1);
   const isSpeaking = state === "speaking";
+  const timingStatus =
+    state === "ended"
+      ? `${metrics.samples.length} completed word timings captured`
+      : state === "speaking"
+        ? `${metrics.boundaries} boundary events received`
+        : state === "paused"
+          ? "Speech and the glyph wipe are paused"
+          : "Actual time is recorded when the next word starts";
 
   return (
     <section className={styles.demo} aria-labelledby="live-demo-heading">
@@ -178,9 +185,9 @@ export default function LiveDemo(): JSX.Element {
           </p>
 
           <div className={styles.progressPanel}>
-            <div>
-              <span>Active wipe</span>
-              <strong>{metrics.activeWord}</strong>
+            <div className={styles.currentWord}>
+              <span>Current spoken word</span>
+              <strong>{isSpeaking ? metrics.activeWord : "—"}</strong>
             </div>
             <div
               className={styles.meter}
@@ -220,31 +227,47 @@ export default function LiveDemo(): JSX.Element {
             </button>
           </div>
 
-          <div className={styles.metrics}>
-            <article>
-              <span>Word boundaries</span>
-              <strong>{metrics.boundaries}</strong>
-              <small>received from the browser</small>
-            </article>
-            <article>
-              <span>Latest word</span>
-              <strong>{latest?.word ?? "—"}</strong>
-              <small>measured after its next boundary</small>
-            </article>
-            <article>
-              <span>Predicted / actual</span>
-              <strong>
-                {latest
-                  ? `${Math.round(latest.predictedMs)} / ${Math.round(latest.actualMs)} ms`
-                  : "—"}
-              </strong>
-              <small>
-                {latest
-                  ? `error ${Math.round(latest.errorMs)} ms`
-                  : "waiting for two boundaries"}
-              </small>
-            </article>
-          </div>
+          <section className={styles.trace} aria-labelledby="timing-trace-heading">
+            <div className={styles.traceHeading}>
+              <div>
+                <p>Timing trace</p>
+                <h3 id="timing-trace-heading">What the browser has measured</h3>
+              </div>
+              <span>{timingStatus}</span>
+            </div>
+            {metrics.samples.length ? (
+              <div className={styles.tableScroll}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Word</th>
+                      <th scope="col">Predicted</th>
+                      <th scope="col">Observed</th>
+                      <th scope="col">Difference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {metrics.samples.map((sample) => (
+                      <tr key={`${sample.index}-${sample.boundaryElapsedMs}`}>
+                        <th scope="row">{sample.word}</th>
+                        <td>{Math.round(sample.predictedMs)} ms</td>
+                        <td>{Math.round(sample.actualMs)} ms</td>
+                        <td data-positive={sample.errorMs >= 0}>
+                          {sample.errorMs >= 0 ? "+" : ""}
+                          {Math.round(sample.errorMs)} ms
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className={styles.emptyTrace}>
+                Start speaking. The first completed word appears here when its following
+                word boundary arrives.
+              </p>
+            )}
+          </section>
         </>
       ) : (
         <p className={styles.unsupported}>

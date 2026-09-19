@@ -94,9 +94,6 @@ export default function Home(): JSX.Element {
             </p>
             <div className={styles.timeline} aria-hidden="true">
               <span className={styles.timelineActive} />
-              <span />
-              <span />
-              <span />
             </div>
             <p className={styles.previewNote}>
               One continuous boundary moves through the glyphs — not a whole-word flash.
@@ -106,62 +103,73 @@ export default function Home(): JSX.Element {
 
         <LiveDemo />
 
-        <section className={styles.section}>
-          <p className={styles.eyebrow}>Why GlyphFlow</p>
-          <h2>Small surface area, deliberate behavior.</h2>
-          <div className={styles.cardGrid}>
-            <article>
-              <span className={styles.icon}>
-                <Icon name="motion" />
+        <section className={`${styles.section} ${styles.explainer}`}>
+          <div className={styles.explainerCopy}>
+            <p className={styles.eyebrow}>The signal behind the wipe</p>
+            <h2>One boundary starts the fill. The next boundary teaches it.</h2>
+            <p>
+              The browser voice remains the clock. GlyphFlow does not split a word into
+              letters or guess phonemes: it moves one gradient boundary through the
+              glyphs until the voice reports the next word.
+            </p>
+          </div>
+
+          <div
+            className={styles.signalDiagram}
+            aria-label="How a spoken word becomes a glyph wipe"
+          >
+            <article className={styles.signalSource}>
+              <span className={styles.diagramLabel}>
+                <Icon name="wave" /> Browser voice
               </span>
-              <h3>Continuous inside-word motion</h3>
+              <strong>“caption” begins</strong>
+              <p>Web Speech speaks the original text.</p>
+            </article>
+            <div className={styles.diagramConnector} aria-hidden="true">
+              <span />
+            </div>
+            <article className={styles.signalBoundary}>
+              <span className={styles.diagramLabel}>Word boundary</span>
+              <strong>charIndex: 12</strong>
+              <p>The voice tells us which word just started.</p>
+            </article>
+            <div className={styles.diagramConnector} aria-hidden="true">
+              <span />
+            </div>
+            <article className={styles.signalWipe}>
+              <span className={styles.diagramLabel}>Inside the glyphs</span>
+              <strong className={styles.diagramWord}>caption</strong>
               <p>
-                CSS gradients animate through the letters. No character-by-character DOM
-                splitting.
+                A continuous CSS gradient advances — one boundary, not seven letter
+                elements.
               </p>
             </article>
-            <article>
-              <span className={styles.icon}>
-                <Icon name="browser" />
-              </span>
-              <h3>No service to operate</h3>
-              <p>
-                No audio files, servers, models, analytics, storage, or runtime
-                dependencies.
-              </p>
-            </article>
-            <article>
-              <span className={styles.icon}>
-                <Icon name="timing" />
-              </span>
-              <h3>Observed timing, then prediction</h3>
-              <p>
-                It learns from received word boundaries and uses a bounded prediction
-                between them.
-              </p>
+            <div className={styles.diagramConnector} aria-hidden="true">
+              <span />
+            </div>
+            <article className={styles.signalLearn}>
+              <span className={styles.diagramLabel}>Next word</span>
+              <strong>prediction adjusts</strong>
+              <p>Observed duration refines the following wipe.</p>
             </article>
           </div>
-        </section>
 
-        <section className={`${styles.section} ${styles.flowSection}`}>
-          <p className={styles.eyebrow}>How it works</p>
-          <h2>Speech stays the source of truth.</h2>
-          <ol className={styles.steps}>
+          <ul className={styles.operatingNotes}>
             <li>
-              <strong>Speak text</strong>
-              <span>The browser speaks an ordinary `SpeechSynthesisUtterance`.</span>
+              <strong>Browser-native</strong>
+              <span>Web Speech API only; no server or audio file.</span>
             </li>
             <li>
-              <strong>Receive word boundaries</strong>
-              <span>GlyphFlow maps each boundary to its original word position.</span>
+              <strong>Continuous, bounded motion</strong>
+              <span>Progress eases toward 94% and waits near 98.5% for reality.</span>
             </li>
             <li>
-              <strong>Fill the current word</strong>
+              <strong>No hidden state</strong>
               <span>
-                A lightweight model moves the gradient until the next boundary arrives.
+                No storage, network calls, models, analytics, or runtime dependencies.
               </span>
             </li>
-          </ol>
+          </ul>
         </section>
 
         <section className={styles.section}>

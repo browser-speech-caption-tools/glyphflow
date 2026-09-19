@@ -18,27 +18,29 @@ export class Renderer {
     }
   }
   render(tokens: readonly WordToken[], sourceText = ""): void {
-    this.target.replaceChildren();
     this.words.length = 0;
+    const document = this.target.ownerDocument;
+    const fragment = document.createDocumentFragment();
     const initial = sourceText.slice(0, tokens[0]?.start ?? sourceText.length);
     if (initial) {
       const prefix = document.createElement("span");
       prefix.textContent = initial;
-      this.target.append(prefix);
+      fragment.append(prefix);
     }
     for (const token of tokens) {
       const word = document.createElement("span");
       word.className = "kn-word";
       word.textContent = token.text;
       word.style.setProperty("--kn-progress", "0%");
-      this.target.append(word);
+      fragment.append(word);
       this.words.push(word);
       if (token.trailing) {
         const trailing = document.createElement("span");
         trailing.textContent = token.trailing;
-        this.target.append(trailing);
+        fragment.append(trailing);
       }
     }
+    this.target.replaceChildren(fragment);
   }
   progress(index: number, value: number): void {
     this.words[index]?.style.setProperty(

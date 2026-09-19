@@ -1,0 +1,17 @@
+.kn-caption {
+  white-space: pre-wrap;
+}
+
+.kn-word {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--kn-highlight-color, #f3f7ff) 0%,
+    var(--kn-highlight-color, #8da7ff) var(--kn-progress),
+    var(--kn-unhighlight-color, #475061) var(--kn-progress),
+    var(--kn-unhighlight-color, #475061) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

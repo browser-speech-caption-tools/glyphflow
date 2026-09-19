@@ -1,0 +1,42 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #e8edff;
+  background: #161a25;
+}
+main {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+label {
+  display: block;
+  margin: 1rem 0;
+}
+textarea,
+select {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 0.3rem;
+}
+#caption {
+  min-height: 5rem;
+  padding: 1.5rem 0;
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 1.25;
+}
+#status {
+  min-height: 1.5em;
+}
+button {
+  margin: 0.2rem;
+}
+table {
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #475061;
+  text-align: left;
+}

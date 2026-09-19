@@ -63,6 +63,27 @@ describe("KaraokeNarrator", () => {
       n.getDiagnostics().samples[0]!.absoluteErrorMs,
     );
   });
+  it("normalizes boundary elapsed time reported in either seconds or milliseconds", () => {
+    let time = 0;
+    const clock = vi.spyOn(performance, "now").mockImplementation(() => time);
+
+    for (const elapsedTime of [0.24, 240]) {
+      const driver = new Driver();
+      const narrator = new KaraokeNarratorImpl({
+        text: "one two",
+        target: document.createElement("div"),
+        driver,
+      });
+      narrator.speak();
+      driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
+      time = 240;
+      driver.handlers!.boundary({ charIndex: 4, elapsedTime, name: "word" });
+      expect(narrator.getDiagnostics().samples[0]?.actualMs).toBe(240);
+      time = 0;
+    }
+
+    clock.mockRestore();
+  });
   it("renders the source text exactly, including a leading punctuation mark", () => {
     const target = document.createElement("div");
     new KaraokeNarratorImpl({ text: "… hello!", target, driver: new Driver() });

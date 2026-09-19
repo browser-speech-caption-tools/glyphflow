@@ -3,13 +3,19 @@ import type { WordToken } from "./types";
 export class Renderer {
   private readonly words: HTMLSpanElement[] = [];
   private readonly hadCaptionClass: boolean;
+  private readonly addedClassNames: string[] = [];
   constructor(
     private readonly target: HTMLElement,
     className?: string,
   ) {
     this.hadCaptionClass = target.classList.contains("kn-caption");
     target.classList.add("kn-caption");
-    if (className) target.classList.add(className);
+    for (const name of className?.split(/\s+/).filter(Boolean) ?? []) {
+      if (!target.classList.contains(name)) {
+        target.classList.add(name);
+        this.addedClassNames.push(name);
+      }
+    }
   }
   render(tokens: readonly WordToken[], sourceText = ""): void {
     this.target.replaceChildren();
@@ -47,5 +53,6 @@ export class Renderer {
     this.target.replaceChildren();
     this.words.length = 0;
     if (!this.hadCaptionClass) this.target.classList.remove("kn-caption");
+    for (const name of this.addedClassNames) this.target.classList.remove(name);
   }
 }

@@ -184,15 +184,21 @@ describe("KaraokeNarrator", () => {
   });
   it("cancels scheduled animation on destroy", () => {
     const driver = new Driver();
+    const target = document.createElement("div");
     const n = new KaraokeNarratorImpl({
       text: "one",
-      target: document.createElement("div"),
+      target,
       driver,
+      className: "custom-caption another-caption",
     });
     n.speak();
     driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
     n.destroy();
     expect(cancelAnimationFrame).toHaveBeenCalled();
+    expect(target.textContent).toBe("");
+    expect(target.classList.contains("kn-caption")).toBe(false);
+    expect(target.classList.contains("custom-caption")).toBe(false);
+    expect(target.classList.contains("another-caption")).toBe(false);
   });
 });
 void raf;

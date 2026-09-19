@@ -57,11 +57,12 @@ export default function Home(): JSX.Element {
       <main>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>Web Speech API + text animation</p>
-            <h1>Animate text as the browser speaks.</h1>
+            <p className={styles.eyebrow}>Web Speech API + continuous glyph wipe</p>
+            <h1>Hear the word. Watch it fill from first letter to last.</h1>
             <p className={styles.lede}>
-              GlyphFlow connects browser speech synthesis to a smooth, word-by-word text
-              wipe. Each spoken word fills from left to right in real time.
+              GlyphFlow speaks English text in the browser while a CSS gradient travels
+              continuously through the letters of the spoken word. Word boundaries then
+              calibrate the timing for what comes next.
             </p>
             <div className={styles.actions}>
               <Link className={styles.primaryAction} to="/docs/getting-started">
@@ -84,12 +85,12 @@ export default function Home(): JSX.Element {
               <span className={styles.previewLabel}>
                 <Icon name="wave" /> Speech input
               </span>
-              <span className={styles.boundary}>word boundary · 420ms</span>
+              <span className={styles.boundary}>word boundary → timing update</span>
             </div>
             <p className={styles.caption} aria-hidden="true">
-              <span className={`${styles.word} ${styles.wordOne}`}>Speech</span>{" "}
-              <span className={`${styles.word} ${styles.wordTwo}`}>drives</span>{" "}
-              <span className={`${styles.word} ${styles.wordThree}`}>text.</span>
+              <span className={`${styles.word} ${styles.wordOne}`}>
+                synchronization
+              </span>
             </p>
             <div className={styles.timeline} aria-hidden="true">
               <span className={styles.timelineActive} />
@@ -98,7 +99,7 @@ export default function Home(): JSX.Element {
               <span />
             </div>
             <p className={styles.previewNote}>
-              Speech-driven text animation · visual preview
+              One continuous boundary moves through the glyphs — not a whole-word flash.
             </p>
           </div>
         </section>

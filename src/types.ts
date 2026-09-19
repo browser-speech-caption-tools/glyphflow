@@ -1,11 +1,5 @@
 export type NarratorState =
-  | "idle"
-  | "speaking"
-  | "paused"
-  | "ended"
-  | "cancelled"
-  | "error"
-  | "unsupported";
+  "idle" | "speaking" | "paused" | "ended" | "cancelled" | "error" | "unsupported";
 
 export type SpeechSynthesisSupport = { supported: boolean; reason?: string };
 
@@ -65,11 +59,29 @@ export interface KaraokeNarrator {
   destroy(): void;
 }
 
-export type BoundaryEventData = { charIndex: number; elapsedTime: number; name?: string };
+export type BoundaryEventData = {
+  charIndex: number;
+  elapsedTime: number;
+  name?: string;
+};
 export type SpeechDriver = {
   supported(): SpeechSynthesisSupport;
-  speak(text: string, options: { voice?: SpeechSynthesisVoice; lang?: string; rate: number; pitch: number; volume: number }, events: {
-    boundary(event: BoundaryEventData): void; end(): void; error(reason: string): void;
-  }): void;
-  pause(): void; resume(): void; cancel(): void;
+  speak(
+    text: string,
+    options: {
+      voice?: SpeechSynthesisVoice;
+      lang?: string;
+      rate: number;
+      pitch: number;
+      volume: number;
+    },
+    events: {
+      boundary(event: BoundaryEventData): void;
+      end(): void;
+      error(reason: string): void;
+    },
+  ): void;
+  pause(): void;
+  resume(): void;
+  cancel(): void;
 };

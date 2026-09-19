@@ -2,7 +2,9 @@ import type { WordToken } from "./types";
 
 export class TimingPredictor {
   millisecondsPerUnit: number;
-  constructor(initialMsPerUnit = 155) { this.millisecondsPerUnit = initialMsPerUnit; }
+  constructor(initialMsPerUnit = 155) {
+    this.millisecondsPerUnit = initialMsPerUnit;
+  }
   predict(token: WordToken, rate: number): number {
     return Math.max(90, (token.units * this.millisecondsPerUnit) / Math.max(0.1, rate));
   }

@@ -71,6 +71,19 @@ describe("KaraokeNarrator", () => {
     driver.handlers!.end();
     expect(words[2]?.style.getPropertyValue("--kn-progress")).toBe("100%");
   });
+  it("completes words before the first reported boundary", () => {
+    const driver = new Driver();
+    const target = document.createElement("div");
+    const n = new KaraokeNarratorImpl({ text: "one two", target, driver });
+    n.speak();
+    driver.handlers!.boundary({ charIndex: 4, elapsedTime: 0.3, name: "word" });
+    expect(
+      target
+        .querySelector<HTMLElement>(".kn-word")
+        ?.style.getPropertyValue("--kn-progress"),
+    ).toBe("100%");
+    expect(n.getDiagnostics().samples).toHaveLength(0);
+  });
   it("ignores unknown, duplicate, reversed, and invalid boundaries", () => {
     const driver = new Driver();
     const n = new KaraokeNarratorImpl({
@@ -92,15 +105,39 @@ describe("KaraokeNarrator", () => {
   });
   it("does not animate while paused", () => {
     const driver = new Driver();
+    const target = document.createElement("div");
+    let time = 0;
+    const clock = vi.spyOn(performance, "now").mockImplementation(() => time);
+    let frame: FrameRequestCallback | undefined;
+    const schedule = vi.mocked(requestAnimationFrame);
+    schedule.mockImplementationOnce((callback) => {
+      frame = callback;
+      return 1;
+    });
     const n = new KaraokeNarratorImpl({
       text: "one",
-      target: document.createElement("div"),
+      target,
       driver,
     });
     n.speak();
     driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
+    time = 100;
+    frame?.(time);
+    const word = target.querySelector<HTMLElement>(".kn-word")!;
+    const beforePause = word.style.getPropertyValue("--kn-progress");
     n.pause();
+    time = 1000;
+    frame?.(time);
+    expect(word.style.getPropertyValue("--kn-progress")).toBe(beforePause);
+    schedule.mockImplementationOnce((callback) => {
+      frame = callback;
+      return 1;
+    });
+    n.resume();
+    frame?.(time);
+    expect(word.style.getPropertyValue("--kn-progress")).toBe(beforePause);
     expect(cancelAnimationFrame).toHaveBeenCalled();
+    clock.mockRestore();
   });
   it("ignores callbacks after cancel", () => {
     const driver = new Driver();

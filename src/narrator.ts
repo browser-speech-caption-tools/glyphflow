@@ -126,6 +126,10 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     const elapsed = event.elapsedTime * 1000;
     if (elapsed < this.boundaryElapsed) return;
     this.boundaries++;
+    if (this.active < 0) {
+      for (let completed = 0; completed < index; completed++)
+        this.renderer.complete(completed);
+    }
     if (this.active >= 0) {
       const previous = this.tokens[this.active];
       if (previous) {

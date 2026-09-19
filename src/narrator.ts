@@ -31,7 +31,9 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   private pausedMs = 0;
   private raf = 0;
   private samples: WordTimingSample[] = [];
+  private absoluteErrorTotal = 0;
   private boundaries = 0;
+  private hasUtterance = false;
   private destroyed = false;
   constructor(options: InternalOptions) {
     this.options = options;
@@ -41,7 +43,6 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     this.renderer.render(this.tokens, options.text);
   }
   private diagnostics(): NarrationDiagnostics {
-    const absolute = this.samples.map((s) => s.absoluteErrorMs);
     return {
       text: this.options.text,
       voice: this.options.voice
@@ -53,8 +54,8 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
         : null,
       rate: this.rate,
       samples: this.samples,
-      meanAbsoluteErrorMs: absolute.length
-        ? absolute.reduce((a, b) => a + b, 0) / absolute.length
+      meanAbsoluteErrorMs: this.samples.length
+        ? this.absoluteErrorTotal / this.samples.length
         : null,
       millisecondsPerUnit: this.predictor.millisecondsPerUnit,
       receivedBoundaryEvents: this.boundaries,
@@ -81,12 +82,14 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     const id = ++this.session;
     this.predictor = new TimingPredictor();
     this.samples = [];
+    this.absoluteErrorTotal = 0;
     this.boundaries = 0;
     this.active = -1;
     this.boundaryElapsed = 0;
     this.pausedMs = 0;
     this.renderer.render(this.tokens, this.options.text);
     this.setState("speaking");
+    this.hasUtterance = true;
     this.driver.speak(
       this.options.text,
       {
@@ -100,7 +103,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
         boundary: (event) => this.onBoundary(id, event),
         end: () => this.onEnd(id),
         error: (reason) => {
-          if (id === this.session) {
+          if (id === this.session && this.hasUtterance) {
             this.stop(false);
             this.setState("error", reason);
           }
@@ -147,6 +150,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
           };
           this.predictor.observe(previous, actual, this.rate);
           this.samples.push(sample);
+          this.absoluteErrorTotal += sample.absoluteErrorMs;
           this.options.onWordTiming?.(sample, this.diagnostics());
         }
         for (let completed = this.active; completed < index; completed++)
@@ -199,12 +203,14 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     cancelAnimationFrame(this.raf);
     this.raf = 0;
     ++this.session;
-    this.driver.cancel();
+    if (this.hasUtterance) this.driver.cancel();
+    this.hasUtterance = false;
     if (notify) this.setState("cancelled");
   }
   private onEnd(id: number): void {
-    if (id !== this.session || this.destroyed) return;
+    if (id !== this.session || this.destroyed || !this.hasUtterance) return;
     cancelAnimationFrame(this.raf);
+    this.hasUtterance = false;
     if (!this.boundaries) {
       this.setState(
         "unsupported",

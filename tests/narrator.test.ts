@@ -37,6 +37,20 @@ describe("KaraokeNarrator", () => {
     expect(() => narrator.speak()).not.toThrow();
     expect(states).toEqual(["unsupported"]);
   });
+  it("does not cancel unrelated speech before its first session or after its own end", () => {
+    const driver = new Driver();
+    const n = new KaraokeNarratorImpl({
+      text: "hello",
+      target: document.createElement("div"),
+      driver,
+    });
+    n.speak();
+    expect(driver.cancel).not.toHaveBeenCalled();
+    driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
+    driver.handlers!.end();
+    n.destroy();
+    expect(driver.cancel).not.toHaveBeenCalled();
+  });
   it("completes the previous word at a boundary", () => {
     const driver = new Driver();
     const target = document.createElement("div");
@@ -45,6 +59,9 @@ describe("KaraokeNarrator", () => {
     driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
     driver.handlers!.boundary({ charIndex: 4, elapsedTime: 0.4, name: "word" });
     expect(target.querySelector(".kn-word")?.getAttribute("style")).toContain("100%");
+    expect(n.getDiagnostics().meanAbsoluteErrorMs).toBe(
+      n.getDiagnostics().samples[0]!.absoluteErrorMs,
+    );
   });
   it("renders the source text exactly, including a leading punctuation mark", () => {
     const target = document.createElement("div");

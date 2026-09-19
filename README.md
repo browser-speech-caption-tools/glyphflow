@@ -68,6 +68,8 @@ The initial Chrome voice and OS combination has not yet been verified in this re
 
 This is not an audio-file synchronization or forced-alignment library. It cannot make a voice more natural; voice quality is determined by the browser, OS, and voice. It needs word boundaries, does not guarantee every OS/voice, and deliberately performs no storage, analytics, network request, or external-model use. Voice-specific persistence or analysis belongs to the host application.
 
+The browser exposes one shared `speechSynthesis` queue. Cancelling an active GlyphFlow narration uses the global `speechSynthesis.cancel()` method and can also stop speech started by other code on the page. Coordinate speech ownership in the host application.
+
 ## Development
 
 ```sh

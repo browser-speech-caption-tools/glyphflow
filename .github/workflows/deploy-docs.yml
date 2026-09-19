@@ -25,7 +25,7 @@ jobs:
           cache: npm
           cache-dependency-path: docs-site/package.json
       - name: Install documentation dependencies
-        run: npm install
+        run: npm ci
         working-directory: docs-site
       - name: Build documentation
         run: npm run build

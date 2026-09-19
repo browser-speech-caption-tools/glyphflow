@@ -81,6 +81,8 @@ npm run build
 npm run demo
 ```
 
+The contributor documentation site lives in `docs-site/`. Run `npm run docs:install` once, then `npm run docs:dev`.
+
 ## Roadmap
 
 - Framework adapters

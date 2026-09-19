@@ -2,22 +2,45 @@
   "name": "@enumura1/glyphflow",
   "version": "0.1.0",
   "description": "Browser Web Speech narration with smoothly wiping karaoke captions.",
-  "keywords": ["speech-synthesis", "web-speech-api", "captions", "karaoke"],
-  "repository": { "type": "git", "url": "git+https://github.com/enumura1/glyphflow.git" },
+  "keywords": [
+    "speech-synthesis",
+    "web-speech-api",
+    "captions",
+    "karaoke"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enumura1/glyphflow.git"
+  },
   "homepage": "https://github.com/enumura1/glyphflow#readme",
-  "bugs": { "url": "https://github.com/enumura1/glyphflow/issues" },
+  "bugs": {
+    "url": "https://github.com/enumura1/glyphflow/issues"
+  },
   "license": "MIT",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "sideEffects": ["./dist/styles.css"],
+  "sideEffects": [
+    "./dist/styles.css"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist", "README.md", "LICENSE"],
-  "engines": { "node": ">=20" },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsup && cp src/styles.css dist/styles.css",
     "prepack": "npm run build",
@@ -25,7 +48,10 @@
     "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" tsup.config.ts eslint.config.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "demo": "vite --config examples/basic/vite.config.ts"
+    "demo": "vite --config examples/basic/vite.config.ts",
+    "docs:install": "npm --prefix docs-site install",
+    "docs:dev": "npm --prefix docs-site run start",
+    "docs:build": "npm --prefix docs-site run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",

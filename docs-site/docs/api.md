@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 6
 title: API
 ---
 
@@ -7,9 +7,20 @@ title: API
 
 Returns an object with `speak()`, `pause()`, `resume()`, `cancel()`, `getDiagnostics()`, and `destroy()`.
 
-Options include `text`, an HTMLElement `target`, optional `voice`, `lang`, `rate`, `pitch`, `volume`, `className`, `onStateChange`, and `onWordTiming`.
+| Option | Description |
+| --- | --- |
+| `text` | Source text to speak and render. |
+| `target` | Element whose content GlyphFlow renders. |
+| `voice` | Optional browser `SpeechSynthesisVoice`. |
+| `lang` | Optional BCP 47 language tag, such as `en-US`. |
+| `rate`, `pitch`, `volume` | Web Speech utterance settings. |
+| `className` | Class added to the target for application styling. |
+| `onStateChange` | Receives state transitions and optional reason/diagnostics. |
+| `onWordTiming` | Receives observed timing samples and diagnostics. |
 
-`onStateChange` reports `idle`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. A voice that emits no usable word boundaries ends in `unsupported`.
+`speak()` replaces an existing session. `pause()` and `resume()` affect the active session. `cancel()` stops it and emits `cancelled`. `destroy()` cancels work, clears the target, and releases animation work; do not reuse an instance after destroying it.
+
+`onStateChange` reports `idle`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. A voice that emits no usable word boundaries ends in `unsupported`. See [States and diagnostics](./diagnostics) for event payloads and timing behavior.
 
 ## Support helpers
 

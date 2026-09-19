@@ -44,8 +44,8 @@
   "scripts": {
     "build": "tsup && cp src/styles.css dist/styles.css",
     "prepack": "npm run build",
-    "lint": "eslint .",
-    "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" tsup.config.ts eslint.config.js",
+    "lint": "oxlint --deny-warnings",
+    "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" tsup.config.ts .oxlintrc.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "demo": "vite --config examples/basic/vite.config.ts",
@@ -54,16 +54,12 @@
     "docs:build": "npm --prefix docs-site run build"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
     "@types/node": "^22.13.1",
-    "eslint": "^9.20.0",
-    "eslint-config-prettier": "^10.0.1",
-    "globals": "^15.15.0",
     "jsdom": "^26.0.0",
+    "oxlint": "^1.83.0",
     "prettier": "^3.5.0",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.0",
     "vite": "^6.1.0",
     "vitest": "^4.1.11"
   }

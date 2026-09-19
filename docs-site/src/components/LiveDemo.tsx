@@ -5,6 +5,7 @@ import {
   getSpeechSynthesisSupport,
   type KaraokeNarrator,
   type NarratorState,
+  type SpeechSynthesisSupport,
 } from "../../../src/index";
 import "../../../src/styles.css";
 
@@ -16,15 +17,16 @@ export default function LiveDemo(): JSX.Element {
   const targetRef = useRef<HTMLParagraphElement>(null);
   const narratorRef = useRef<KaraokeNarrator | null>(null);
   const [state, setState] = useState<NarratorState | "ready">("ready");
-  const support = getSpeechSynthesisSupport();
+  const [support, setSupport] = useState<SpeechSynthesisSupport | null>(null);
 
   useEffect(() => {
+    setSupport(getSpeechSynthesisSupport());
     return () => narratorRef.current?.destroy();
   }, []);
 
   function speak(): void {
     const target = targetRef.current;
-    if (!target || !support.supported) return;
+    if (!target || !support?.supported) return;
 
     narratorRef.current?.destroy();
     narratorRef.current = createKaraokeNarrator({
@@ -57,7 +59,9 @@ export default function LiveDemo(): JSX.Element {
         each spoken word.
       </p>
 
-      {support.supported ? (
+      {support === null ? (
+        <p className={styles.unsupported}>Checking browser speech support…</p>
+      ) : support.supported ? (
         <>
           <p ref={targetRef} className={styles.caption} aria-live="polite">
             {text}
@@ -79,8 +83,8 @@ export default function LiveDemo(): JSX.Element {
         </>
       ) : (
         <p className={styles.unsupported}>
-          Web Speech API is unavailable in this browser, so the live narration cannot
-          start here.
+          {support.reason ??
+            "Web Speech API is unavailable in this browser, so the live narration cannot start here."}
         </p>
       )}
     </section>

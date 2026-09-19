@@ -26,6 +26,8 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   private active = -1;
   private boundaryAt = 0;
   private boundaryElapsed = 0;
+  private boundaryElapsedScale: 1 | 1000 | null = null;
+  private speechStartedAt = 0;
   private predicted = 0;
   private pauseAt = 0;
   private pausedMs = 0;
@@ -86,7 +88,9 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     this.boundaries = 0;
     this.active = -1;
     this.boundaryElapsed = 0;
+    this.boundaryElapsedScale = null;
     this.pausedMs = 0;
+    this.speechStartedAt = now();
     this.renderer.render(this.tokens, this.options.text);
     this.setState("speaking");
     this.hasUtterance = true;
@@ -126,7 +130,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
       return;
     const index = findTokenIndex(this.tokens, event.charIndex);
     if (index < 0 || index <= this.active) return;
-    const elapsed = event.elapsedTime * 1000;
+    const elapsed = this.normalizeBoundaryElapsed(event.elapsedTime);
     if (elapsed < this.boundaryElapsed) return;
     this.boundaries++;
     if (this.active < 0) {
@@ -165,6 +169,22 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     if (token) this.predicted = this.predictor.predict(token, this.rate);
     this.renderer.progress(index, 0);
     this.animate(id);
+  }
+  private normalizeBoundaryElapsed(rawElapsed: number): number {
+    if (rawElapsed === 0) return 0;
+    if (this.boundaryElapsedScale) return rawElapsed * this.boundaryElapsedScale;
+
+    // The Web Speech specification defines elapsedTime in seconds, but some
+    // Chrome desktop voices report milliseconds. Select the scale whose value
+    // matches the elapsed local clock and keep it for this utterance.
+    const localElapsed = Math.max(0, now() - this.speechStartedAt - this.pausedMs);
+    const asMilliseconds = rawElapsed;
+    const asSeconds = rawElapsed * 1000;
+    this.boundaryElapsedScale =
+      Math.abs(asSeconds - localElapsed) <= Math.abs(asMilliseconds - localElapsed)
+        ? 1000
+        : 1;
+    return rawElapsed * this.boundaryElapsedScale;
   }
   private animate(id: number): void {
     cancelAnimationFrame(this.raf);

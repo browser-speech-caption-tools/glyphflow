@@ -13,8 +13,7 @@
 .header,
 .playback,
 .progressPanel,
-.controls,
-.metrics {
+.controls {
   display: flex;
 }
 
@@ -123,7 +122,7 @@
 }
 
 .voice span,
-.metrics span {
+.progressPanel span {
   color: var(--gf-muted);
   font-size: 0.72rem;
   font-weight: 700;
@@ -169,7 +168,7 @@
   margin: 0 0 1.5rem;
 }
 
-.progressPanel > div:first-child {
+.currentWord {
   display: grid;
   gap: 0.15rem;
 }
@@ -243,32 +242,98 @@
   color: #fff;
 }
 
-.metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-top: 2rem;
-}
-
-.metrics article {
-  display: grid;
-  gap: 0.35rem;
+.trace {
+  margin-top: 2.5rem;
   border-top: 1px solid var(--gf-border);
-  padding-top: 1rem;
+  padding-top: 1.25rem;
 }
 
-.metrics strong {
-  overflow: hidden;
+.traceHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.traceHeading p {
+  margin: 0;
+  color: var(--ifm-color-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.traceHeading h3 {
+  margin: 0.35rem 0 0;
   color: var(--gf-heading);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 1.1rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 1.15rem;
 }
 
-.metrics small {
+.traceHeading > span {
   color: var(--gf-muted);
+  font-size: 0.8rem;
   line-height: 1.45;
+  text-align: right;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid var(--gf-border);
+  border-radius: 0.75rem;
+}
+
+.tableScroll table {
+  width: 100%;
+  min-width: 38rem;
+  border-collapse: collapse;
+  color: var(--gf-heading);
+  font-size: 0.88rem;
+}
+
+.tableScroll th,
+.tableScroll td {
+  border-bottom: 1px solid var(--gf-border);
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+}
+
+.tableScroll thead {
+  background: var(--gf-code-background);
+}
+
+.tableScroll thead th {
+  color: var(--gf-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tableScroll tbody tr:last-child th,
+.tableScroll tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tableScroll tbody th {
+  font-weight: 750;
+}
+
+.tableScroll td {
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.tableScroll td[data-positive="true"] {
+  color: var(--ifm-color-primary);
+}
+
+.emptyTrace {
+  margin: 1rem 0 0;
+  border: 1px dashed var(--gf-border-strong);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  color: var(--gf-muted);
+  line-height: 1.55;
 }
 
 .unsupported {
@@ -294,14 +359,18 @@
   .header {
     flex-direction: column;
   }
-  .metrics {
-    grid-template-columns: 1fr;
-  }
   .progressPanel {
     grid-template-columns: 1fr auto;
   }
-  .progressPanel > div:first-child {
+  .currentWord {
     grid-column: 1 / -1;
+  }
+  .traceHeading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .traceHeading > span {
+    text-align: left;
   }
 }
 

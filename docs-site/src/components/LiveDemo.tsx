@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   createKaraokeNarrator,
   getSpeechSynthesisSupport,
-  getVoices,
   type KaraokeNarrator,
   type NarratorState,
   type SpeechSynthesisSupport,
@@ -60,9 +59,7 @@ export default function LiveDemo(): JSX.Element {
   const [support, setSupport] = useState<SpeechSynthesisSupport | null>(null);
   const [text, setText] = useState(exampleText);
   const [spokenText, setSpokenText] = useState(exampleText);
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [voiceUri, setVoiceUri] = useState("");
-  const [rate, setRate] = useState(1.6);
+  const [rate, setRate] = useState(1);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [metrics, setMetrics] = useState<LiveMetrics>(initialMetrics);
   const startAtRef = useRef(0);
@@ -70,13 +67,7 @@ export default function LiveDemo(): JSX.Element {
   useEffect(() => {
     setSupport(getSpeechSynthesisSupport());
 
-    if (!getSpeechSynthesisSupport().supported) return;
-    const updateVoices = () => setVoices(getVoices());
-    updateVoices();
-    window.speechSynthesis.addEventListener("voiceschanged", updateVoices);
-
     return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", updateVoices);
       releaseSpeech(narratorRef.current);
       narratorRef.current?.destroy();
     };
@@ -130,7 +121,6 @@ export default function LiveDemo(): JSX.Element {
     narratorRef.current = createKaraokeNarrator({
       text,
       target,
-      voice: voices.find((voice) => voice.voiceURI === voiceUri),
       lang: "en-US",
       rate,
       className: styles.caption,
@@ -186,12 +176,6 @@ export default function LiveDemo(): JSX.Element {
   const samplesByIndex = new Map(
     metrics.samples.map((sample) => [sample.index, sample]),
   );
-  const englishVoices = voices.filter((voice) =>
-    voice.lang.toLowerCase().startsWith("en"),
-  );
-  const defaultVoiceLabel = voices.find((voice) => voice.default)?.name ?? "auto";
-  const voiceLabel =
-    voices.find((voice) => voice.voiceURI === voiceUri)?.name ?? defaultVoiceLabel;
   const timingStatus =
     state === "ended"
       ? `${metrics.samples.length} of ${tokens.length} words measured`
@@ -238,21 +222,6 @@ export default function LiveDemo(): JSX.Element {
             </label>
             <div className={styles.setupRow}>
               <label className={styles.field}>
-                <span>Browser voice</span>
-                <select
-                  value={voiceUri}
-                  onChange={(event) => setVoiceUri(event.target.value)}
-                  disabled={isActive}
-                >
-                  <option value="">Browser default ({defaultVoiceLabel})</option>
-                  {englishVoices.map((voice) => (
-                    <option key={voice.voiceURI} value={voice.voiceURI}>
-                      {voice.name} · {voice.lang}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className={styles.field}>
                 <span>Speech rate: {rate.toFixed(1)}×</span>
                 <input
                   type="range"
@@ -275,7 +244,7 @@ export default function LiveDemo(): JSX.Element {
                 : state === "starting"
                   ? "Starting"
                   : "Uses"}{" "}
-              {voiceLabel}
+              the browser's default voice
             </strong>
             <span className={styles.elapsed}>{(elapsedMs / 1000).toFixed(2)} s</span>
           </div>

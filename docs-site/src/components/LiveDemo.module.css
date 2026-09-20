@@ -1,5 +1,5 @@
 .demo {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1320px, calc(100% - 2rem));
   margin: 0 auto;
   border: 1px solid var(--gf-preview-border);
   border-radius: 1.25rem;
@@ -90,6 +90,59 @@
   margin: 1rem 0 0;
   color: var(--gf-muted);
   line-height: 1.65;
+}
+
+.setup {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--gf-border);
+  border-radius: 0.85rem;
+  background: var(--gf-code-background);
+}
+
+.setupRow {
+  max-width: 18rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  color: var(--gf-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+}
+
+.field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--gf-border-strong);
+  border-radius: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--gf-preview-background);
+  color: var(--gf-heading);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.field input[type="range"] {
+  width: 100%;
+  accent-color: var(--ifm-color-primary);
+}
+
+.field textarea:disabled,
+.field input:disabled {
+  opacity: 0.65;
 }
 
 .playback {
@@ -340,6 +393,12 @@
 
 .tableScroll td[data-positive="true"] {
   color: var(--ifm-color-primary);
+}
+
+.tableScroll .unmeasured {
+  color: var(--gf-muted);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.8rem;
 }
 
 .emptyTrace {

@@ -52,7 +52,7 @@
         log(`clicked voice=${selected?.name ?? "browser default"} ${snapshot()}`);
         active = new SpeechSynthesisUtterance("Watch every letter come alive.");
         active.lang = "en-US";
-        active.rate = 1.05;
+        active.rate = 1;
         if (selected) active.voice = selected;
         active.onstart = () => log(`start ${snapshot()}`);
         active.onboundary = (event) =>

@@ -1,6 +1,6 @@
 .hero,
 .section {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1320px, calc(100% - 2rem));
   margin: 0 auto;
 }
 .hero {
@@ -183,7 +183,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: clamp(4rem, 9vw, 7.5rem);
-  letter-spacing: -0.09em;
+  letter-spacing: 0.005em;
   line-height: 0.9;
   animation: wipe 4.8s linear infinite;
 }

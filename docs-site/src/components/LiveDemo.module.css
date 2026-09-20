@@ -92,6 +92,63 @@
   line-height: 1.65;
 }
 
+.setup {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--gf-border);
+  border-radius: 0.85rem;
+  background: var(--gf-code-background);
+}
+
+.setupRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(11rem, 0.6fr);
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  color: var(--gf-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+}
+
+.field textarea,
+.field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--gf-border-strong);
+  border-radius: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--gf-preview-background);
+  color: var(--gf-heading);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.field input[type="range"] {
+  width: 100%;
+  accent-color: var(--ifm-color-primary);
+}
+
+.field textarea:disabled,
+.field select:disabled,
+.field input:disabled {
+  opacity: 0.65;
+}
+
 .playback {
   align-items: center;
   justify-content: space-between;
@@ -342,6 +399,12 @@
   color: var(--ifm-color-primary);
 }
 
+.tableScroll .unmeasured {
+  color: var(--gf-muted);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.8rem;
+}
+
 .emptyTrace {
   margin: 1rem 0 0;
   color: var(--gf-muted);
@@ -386,6 +449,9 @@
 }
 
 @media (max-width: 700px) {
+  .setupRow {
+    grid-template-columns: 1fr;
+  }
   .header {
     flex-direction: column;
   }

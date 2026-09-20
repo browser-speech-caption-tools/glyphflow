@@ -1,5 +1,5 @@
 .demo {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1320px, calc(100% - 2rem));
   margin: 0 auto;
   border: 1px solid var(--gf-preview-border);
   border-radius: 1.25rem;
@@ -445,9 +445,6 @@
 }
 
 @media (max-width: 700px) {
-  .setupRow {
-    grid-template-columns: 1fr;
-  }
   .header {
     flex-direction: column;
   }

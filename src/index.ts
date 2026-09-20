@@ -1,5 +1,5 @@
 export { createKaraokeNarrator } from "./narrator";
-export { getSpeechSynthesisSupport, getVoices } from "./speech-driver";
+export { getSpeechSynthesisSupport, getVoices } from "./browser/speech-driver";
 export type {
   KaraokeNarrator,
   KaraokeNarratorDetail,

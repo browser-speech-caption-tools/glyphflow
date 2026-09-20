@@ -1,4 +1,4 @@
-import type { WordToken } from "./types";
+import type { WordToken } from "../types";
 
 function pauseDurationMs(trailing: string, rate: number): number {
   const normalizedRate = Math.max(0.1, rate);

@@ -1,4 +1,4 @@
-import type { SpeechDriver, SpeechSynthesisSupport } from "./types";
+import type { SpeechDriver, SpeechSynthesisSupport } from "../types";
 
 export function getSpeechSynthesisSupport(): SpeechSynthesisSupport {
   if (typeof window === "undefined")

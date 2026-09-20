@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findTokenIndex, tokenize } from "../src/tokenizer";
+import { findTokenIndex, tokenize } from "../src/core/tokenizer";
 
 describe("tokenize", () => {
   it("preserves punctuation, whitespace, newlines, and apostrophes", () => {

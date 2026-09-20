@@ -1,4 +1,4 @@
-import type { WordToken } from "./types";
+import type { WordToken } from "../types";
 
 export class Renderer {
   private readonly words: HTMLSpanElement[] = [];

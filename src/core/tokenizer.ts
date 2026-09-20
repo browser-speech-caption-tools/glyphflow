@@ -1,4 +1,4 @@
-import type { WordToken } from "./types";
+import type { WordToken } from "../types";
 
 const isWord = (value: string) => /[\p{L}\p{N}]/u.test(value);
 

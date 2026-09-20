@@ -16,7 +16,7 @@ At startup, call `getSpeechSynthesisSupport()` to identify environments without 
 
 Speech synthesis is a shared browser queue. `cancel()` calls the browser's global `speechSynthesis.cancel()`, which may also stop speech started by other code on the page. Applications that use multiple speech features should coordinate ownership of that queue.
 
-Run `npm run demo` with the browser and voice you intend to support. At rate 1.6, check:
+Run `npm run demo` with the browser and voice you intend to support. At rate 1.0, check:
 
 | Check              | Expected result                                                                  |
 | ------------------ | -------------------------------------------------------------------------------- |

@@ -45,7 +45,7 @@ export default function HeroSpeech(): JSX.Element {
       text: sentence,
       target: targetRef.current,
       lang: "en-US",
-      rate: 1.05,
+      rate: 1,
       onStateChange(nextState, detail) {
         setState(nextState);
         setReason(detail?.reason ?? null);

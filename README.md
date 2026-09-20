@@ -25,7 +25,7 @@ import "@enumura1/glyphflow/styles.css";
 const narrator = createKaraokeNarrator({
   text: "This is a karaoke caption.",
   target: document.querySelector("#caption")!,
-  rate: 1.6,
+  rate: 1,
 });
 narrator.speak();
 ```
@@ -56,7 +56,7 @@ The supported starting point is Chrome Desktop, English text, and a voice that e
 
 To verify a voice manually, run `npm run demo` in Chrome Desktop, select an English voice, and:
 
-1. Play the default sentence at rate 1.6. Confirm the highlight moves through the inside of each character. Normal word boundaries complete the prior word; a late or missing boundary uses the visual fallback described above.
+1. Play the default sentence at rate 1.0. Confirm the highlight moves through the inside of each character. Normal word boundaries complete the prior word; a late or missing boundary uses the visual fallback described above.
 2. Pause mid-word, wait, then resume. Confirm the wipe stays still during the pause and does not jump after resume.
 3. Try `go go go`, punctuation, multiple spaces, and a line break. Confirm repeated words track separately and spacing is preserved.
 4. Speak again while audio is active, then cancel. Confirm callbacks from the first session do not change the new display.

@@ -61,7 +61,7 @@ import "@enumura1/glyphflow/styles.css";
 const narrator = createKaraokeNarrator({
   text: "This is a caption.",
   target: document.querySelector("#caption")!,
-  rate: 1.6,
+  rate: 1,
 });
 narrator.speak();
 ```

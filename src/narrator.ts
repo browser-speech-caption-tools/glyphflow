@@ -1,7 +1,7 @@
-import { Renderer } from "./renderer";
-import { BrowserSpeechDriver } from "./speech-driver";
-import { findTokenIndex, tokenize } from "./tokenizer";
-import { TimingPredictor } from "./timing-predictor";
+import { Renderer } from "./browser/renderer";
+import { BrowserSpeechDriver } from "./browser/speech-driver";
+import { findTokenIndex, tokenize } from "./core/tokenizer";
+import { TimingPredictor } from "./core/timing-predictor";
 import type {
   KaraokeNarrator,
   KaraokeNarratorOptions,

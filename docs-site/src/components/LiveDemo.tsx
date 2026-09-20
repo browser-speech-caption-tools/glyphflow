@@ -9,7 +9,7 @@ import {
   type WordTimingSample,
 } from "../../../src/index";
 import "../../../src/styles.css";
-import { tokenize } from "../../../src/tokenizer";
+import { tokenize } from "../../../src/core/tokenizer";
 
 import { claimSpeech, releaseSpeech } from "./speech-session";
 import styles from "./LiveDemo.module.css";

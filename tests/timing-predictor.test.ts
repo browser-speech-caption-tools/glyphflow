@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { TimingPredictor } from "../src/timing-predictor";
-import { tokenize } from "../src/tokenizer";
+import { TimingPredictor } from "../src/core/timing-predictor";
+import { tokenize } from "../src/core/tokenizer";
 
 describe("TimingPredictor", () => {
   const word = tokenize("karaoke")[0]!;

@@ -33,7 +33,10 @@ export class BrowserSpeechDriver implements SpeechDriver {
   ): void {
     if (!this.supported().supported) return;
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.voice = options.voice ?? null;
+    // Leave the voice unset when callers request the browser default. Some
+    // engines treat an explicit `null` assignment as an invalid voice and
+    // immediately emit an `error` event without speaking.
+    if (options.voice) utterance.voice = options.voice;
     utterance.lang = options.lang ?? "";
     utterance.rate = options.rate;
     utterance.pitch = options.pitch;
@@ -47,6 +50,10 @@ export class BrowserSpeechDriver implements SpeechDriver {
     utterance.onend = () => events.end();
     utterance.onerror = (event) =>
       events.error(event.error || "speech synthesis error");
+    // Chrome can retain the paused state after a previous utterance was
+    // cancelled. Resume only that stale paused queue before enqueueing ours;
+    // this keeps a new Speak click from becoming a silent no-op.
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
     window.speechSynthesis.speak(utterance);
   }
   pause(): void {

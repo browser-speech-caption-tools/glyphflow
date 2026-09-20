@@ -3,6 +3,8 @@
 }
 
 .kn-word {
+  display: inline-block;
+  vertical-align: baseline;
   color: transparent;
   background: linear-gradient(
     90deg,

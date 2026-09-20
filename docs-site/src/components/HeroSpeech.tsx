@@ -27,6 +27,7 @@ export default function HeroSpeech(): JSX.Element {
   const narratorRef = useRef<KaraokeNarrator | null>(null);
   const [supported, setSupported] = useState(false);
   const [state, setState] = useState<NarratorState | "ready">("ready");
+  const [reason, setReason] = useState<string | null>(null);
 
   useEffect(() => {
     setSupported(getSpeechSynthesisSupport().supported);
@@ -45,8 +46,9 @@ export default function HeroSpeech(): JSX.Element {
       target: targetRef.current,
       lang: "en-US",
       rate: 1.05,
-      onStateChange(nextState) {
+      onStateChange(nextState, detail) {
         setState(nextState);
+        setReason(detail?.reason ?? null);
         if (
           nextState === "ended" ||
           nextState === "cancelled" ||
@@ -65,7 +67,12 @@ export default function HeroSpeech(): JSX.Element {
     <div className={styles.preview} aria-label="Speech synchronized caption preview">
       <div className={styles.topline}>
         <span className={styles.voice} data-speaking={state === "speaking"}>
-          <SpeechIcon /> {state === "speaking" ? "Speaking" : "Browser speech"}
+          <SpeechIcon />{" "}
+          {state === "speaking"
+            ? "Speaking"
+            : state === "starting"
+              ? "Starting voice"
+              : "Browser speech"}
         </span>
         <span className={styles.hint}>Five words · one continuous wipe per word</span>
       </div>
@@ -99,11 +106,15 @@ export default function HeroSpeech(): JSX.Element {
             ? "Play the sentence to hear the timing"
             : state === "unsupported"
               ? "This voice did not provide word boundaries"
-              : state === "ended"
-                ? "Playback complete · play again"
-                : state === "speaking"
-                  ? "The browser voice drives this caption"
-                  : state}
+              : state === "error"
+                ? (reason ?? "Browser speech could not start")
+                : state === "ended"
+                  ? "Playback complete · play again"
+                  : state === "starting"
+                    ? "Waiting for the browser to start speaking"
+                    : state === "speaking"
+                      ? "The browser voice drives this caption"
+                      : state}
         </span>
         <button type="button" onClick={speak} disabled={!supported}>
           <SpeechIcon /> {state === "speaking" ? "Replay" : "Speak"}

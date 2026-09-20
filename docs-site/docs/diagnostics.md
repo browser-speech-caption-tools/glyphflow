@@ -10,11 +10,12 @@ title: States and diagnostics
 | State | Meaning |
 | --- | --- |
 | `idle` | The instance has been created and has not started speech. |
+| `starting` | The browser has queued the utterance but has not confirmed playback. |
 | `speaking` | Speech and the caption animation are active. |
 | `paused` | Speech is paused and the caption stops moving. |
 | `ended` | Speech ended after receiving usable word boundaries. |
 | `cancelled` | `cancel()` stopped the active session. |
-| `error` | The browser reported a speech synthesis error. |
+| `error` | The browser reported an error, or failed to start speech within 10 seconds. |
 | `unsupported` | Web Speech is unavailable, or speech ended without usable word boundaries. |
 
 ```ts

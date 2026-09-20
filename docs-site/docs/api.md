@@ -20,7 +20,7 @@ Returns an object with `speak()`, `pause()`, `resume()`, `cancel()`, `getDiagnos
 
 `speak()` replaces an existing session. `pause()` and `resume()` affect the active session. `cancel()` stops it and emits `cancelled`. `destroy()` cancels work, clears the target, and releases animation work; do not reuse an instance after destroying it.
 
-`onStateChange` reports `idle`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. A voice that emits no usable word boundaries ends in `unsupported`. See [States and diagnostics](./diagnostics) for event payloads and timing behavior.
+`onStateChange` reports `idle`, `starting`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. `starting` waits for the browser's speech `start` event; a voice that never starts reports `error` after 10 seconds. A voice that emits no usable word boundaries ends in `unsupported`. See [States and diagnostics](./diagnostics) for event payloads and timing behavior.
 
 ## Support helpers
 

@@ -24,6 +24,25 @@
   --gf-callout-background: #f4f6ff;
 }
 
+/* The docs site exercises the package renderer directly. Keep its global
+   caption rule explicit because Docusaurus does not bundle CSS imported from
+   the repository root into the docs stylesheet. */
+.kn-word {
+  display: inline-block;
+  vertical-align: baseline;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--kn-highlight-color, var(--gf-wipe-highlight, #f3f7ff)) 0%,
+    var(--kn-highlight-color, var(--gf-wipe-highlight, #8da7ff)) var(--kn-progress),
+    var(--kn-unhighlight-color, var(--gf-wipe-muted, #475061)) calc(var(--kn-progress) + 3%),
+    var(--kn-unhighlight-color, var(--gf-wipe-muted, #475061)) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 [data-theme="dark"] {
   --ifm-color-primary: #9eafff;
   --ifm-color-primary-dark: #8196ff;

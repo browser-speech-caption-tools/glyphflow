@@ -42,7 +42,6 @@
 }
 
 .state,
-.voice,
 .playback,
 .controls button {
   border: 1px solid var(--gf-border);
@@ -60,7 +59,7 @@
 }
 
 .state svg,
-.voice svg,
+.playback > svg,
 .primary svg {
   width: 1rem;
   height: 1rem;
@@ -76,7 +75,7 @@
 }
 
 .state[data-state="speaking"] svg,
-.playback[data-speaking="true"] .voice svg {
+.playback[data-speaking="true"] > svg {
   animation: voicePulse 900ms ease-in-out infinite;
 }
 
@@ -103,25 +102,13 @@
   background: var(--gf-code-background);
 }
 
-.voice {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border: 0;
-}
-
-.voice svg {
+.playback > svg {
+  flex: none;
   width: 1.7rem;
   height: 1.7rem;
   color: var(--ifm-color-primary);
 }
 
-.voice div {
-  display: grid;
-  gap: 0.1rem;
-}
-
-.voice span,
 .progressPanel span {
   color: var(--gf-muted);
   font-size: 0.72rem;
@@ -130,8 +117,9 @@
   text-transform: uppercase;
 }
 
-.voice strong {
-  max-width: 21rem;
+.playback strong {
+  margin-right: auto;
+  max-width: 24rem;
   overflow: hidden;
   color: var(--gf-heading);
   text-overflow: ellipsis;
@@ -158,6 +146,27 @@
 .caption :global(.kn-word) {
   --kn-highlight-color: var(--gf-wipe-highlight);
   --kn-unhighlight-color: var(--gf-wipe-muted);
+}
+
+.idleMuted {
+  color: var(--gf-wipe-muted);
+}
+
+.idleWipe {
+  display: inline-block;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--gf-wipe-highlight) 0% 48.5%,
+    var(--gf-wipe-muted) 51.5% 100%
+  );
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: idleWipe 4.8s linear infinite;
 }
 
 .progressPanel {
@@ -329,9 +338,6 @@
 
 .emptyTrace {
   margin: 1rem 0 0;
-  border: 1px dashed var(--gf-border-strong);
-  border-radius: 0.75rem;
-  padding: 1rem;
   color: var(--gf-muted);
   line-height: 1.55;
 }
@@ -348,10 +354,28 @@
   }
 }
 
+@keyframes idleWipe {
+  0%,
+  12% {
+    background-position: 100% 0;
+  }
+  68%,
+  84% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .state[data-state="speaking"] svg,
-  .playback[data-speaking="true"] .voice svg {
+  .playback[data-speaking="true"] > svg,
+  .idleWipe {
     animation: none;
+  }
+  .idleWipe {
+    background-position: 0 0;
   }
 }
 

@@ -1,0 +1,150 @@
+.preview {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  border: 1px solid var(--gf-preview-border);
+  border-radius: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background:
+    radial-gradient(circle at 18% 12%, var(--gf-preview-glow), transparent 42%),
+    var(--gf-preview-background);
+  box-shadow: 0 28px 70px var(--gf-preview-shadow);
+}
+
+.topline,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.voice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gf-heading);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.voice svg,
+.footer button svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+.voice[data-speaking="true"] svg {
+  color: var(--ifm-color-primary);
+  animation: pulse 850ms ease-in-out infinite;
+}
+
+.hint,
+.footer > span {
+  color: var(--gf-muted);
+  font-size: 0.76rem;
+}
+
+.captionFrame {
+  display: grid;
+  align-items: center;
+  min-height: 230px;
+}
+
+.caption {
+  grid-area: 1 / 1;
+  margin: 1.25rem 0;
+  color: var(--gf-wipe-muted);
+  font-size: clamp(2.4rem, 4.4vw, 4.6rem);
+  font-weight: 850;
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+
+.caption[hidden] {
+  display: none;
+}
+
+.caption :global(.kn-word) {
+  --kn-highlight-color: var(--gf-wipe-highlight);
+  --kn-unhighlight-color: var(--gf-wipe-muted);
+}
+
+.previewWord {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--gf-wipe-highlight) 0% 48.5%,
+    var(--gf-wipe-muted) 51.5% 100%
+  );
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wipe 1.2s linear both;
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+.footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+.footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes wipe {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+    transform: scaleY(0.8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .previewWord,
+  .voice svg {
+    animation: none;
+  }
+  .previewWord {
+    background-position: 0 0;
+  }
+}
+
+@media (max-width: 540px) {
+  .topline,
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

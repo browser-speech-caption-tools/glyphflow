@@ -5,21 +5,36 @@ title: Project scope
 
 ## v0.1 goals
 
-GlyphFlow focuses on a small, browser-native capability: speak English text through the Web Speech API while rendering a smooth word-level text wipe. It is framework-independent, has zero runtime dependencies, and can be imported safely in SSR environments.
+GlyphFlow has one browser-native job: speak English text while filling each spoken word continuously from left to right _inside its letters_.
+
+| Area           | v0.1 scope                                                                 |
+| -------------- | -------------------------------------------------------------------------- |
+| Speech         | Browser Web Speech API (`speechSynthesis`)                                 |
+| Caption        | A continuous CSS-gradient wipe inside each word, guided by word boundaries |
+| Integration    | Framework-independent TypeScript DOM API; safe to import during SSR        |
+| Dependencies   | Zero runtime dependencies                                                  |
+| Initial target | Desktop Chrome, English text, voices that emit word boundaries             |
 
 ## Deliberate boundaries
 
-GlyphFlow does not use audio files, MP3 generation, forced alignment, external AI models, servers, network requests, cookies, local storage, IndexedDB, or voice-specific persistence. It does not promise support for every browser, OS, voice, or language.
+| Area              | Outside this library's scope                                            |
+| ----------------- | ----------------------------------------------------------------------- |
+| Audio pipeline    | Audio files, MP3 generation, and forced alignment                       |
+| External services | Servers, network requests, and external AI models                       |
+| Stored data       | Cookies, local storage, IndexedDB, and voice-specific persistence       |
+| Compatibility     | A guarantee for every browser, OS, voice, or language                   |
+| Voice quality     | Improving naturalness, voice availability, or emitted boundary behavior |
 
-The library cannot improve a voice's naturalness. Voice quality, availability, and boundary behavior are supplied by the browser and operating system.
+Voice quality and boundary behavior come from the browser and operating system, not GlyphFlow.
 
 ## Roadmap
 
-- Framework adapters
-- Optional custom renderer
-- Empirical voice compatibility matrix
-
-Text plus provided-audio synchronization is out of scope for v0.1.
+| Planned exploration                      | v0.1 status  |
+| ---------------------------------------- | ------------ |
+| Framework adapters                       | Not included |
+| Optional custom renderer                 | Not included |
+| Empirical voice compatibility matrix     | Not included |
+| Text plus provided-audio synchronization | Out of scope |
 
 ## Development commands
 

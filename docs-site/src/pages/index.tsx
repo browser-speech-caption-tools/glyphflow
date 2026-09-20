@@ -1,6 +1,7 @@
 import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
 
+import HeroSpeech from "../components/HeroSpeech";
 import LiveDemo from "../components/LiveDemo";
 import styles from "./index.module.css";
 
@@ -51,20 +52,7 @@ export default function Home(): JSX.Element {
             </pre>
           </div>
 
-          <div className={styles.preview} aria-label="Animated caption preview">
-            <div className={styles.previewTop}>
-              <span className={styles.previewLabel}>
-                <SpeechIcon /> Browser is speaking
-              </span>
-            </div>
-            <p className={styles.caption} aria-hidden="true">
-              <span className={styles.context}>The active word is</span>
-              <span className={`${styles.word} ${styles.wordOne}`}>flowing</span>
-            </p>
-            <p className={styles.previewNote}>
-              The colour boundary travels through the glyphs themselves.
-            </p>
-          </div>
+          <HeroSpeech />
         </section>
 
         <LiveDemo />

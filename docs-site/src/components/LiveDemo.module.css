@@ -143,6 +143,10 @@
   line-height: 1.08;
 }
 
+.caption[hidden] {
+  display: none;
+}
+
 .caption :global(.kn-word) {
   --kn-highlight-color: var(--gf-wipe-highlight);
   --kn-unhighlight-color: var(--gf-wipe-muted);

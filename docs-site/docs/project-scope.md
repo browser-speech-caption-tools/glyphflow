@@ -21,8 +21,7 @@ GlyphFlow has one browser-native job: speak English text while filling each spok
 | ----------------- | ----------------------------------------------------------------------- |
 | Audio pipeline    | Audio files, MP3 generation, and forced alignment                       |
 | External services | Servers, network requests, and external AI models                       |
-| Stored data       | Cookies, local storage, IndexedDB, and voice-specific persistence       |
-| Analytics         | Usage tracking and telemetry                                            |
+| Data & analytics  | Does not save data or collect analytics                                 |
 | Compatibility     | A guarantee for every browser, OS, voice, or language                   |
 | Voice quality     | Improving naturalness, voice availability, or emitted boundary behavior |
 

@@ -48,7 +48,7 @@ The library only sets `--kn-progress` inline. Override its appearance normally:
 
 `onStateChange` receives `idle`, `starting`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. `starting` means the browser has not confirmed playback; a voice that does not start within 10 seconds reports `error`. `unsupported` includes missing Web Speech support and voices that finish without usable word-boundary events. `onWordTiming` receives measured timing samples and current diagnostics. Use `getSpeechSynthesisSupport()` before creating UI; `getVoices()` safely returns an empty list until the browser populates voices (listen for `voiceschanged` in application UI).
 
-Timing samples require two consecutive word boundaries. The final word therefore has no measured sample; it is completed when speech ends. A skipped boundary also produces no sample for that interval.
+Timing samples require two consecutive word boundaries. The final word therefore has no measured sample; it is completed when speech ends. A skipped boundary also produces no sample for that interval. If a following boundary is late or missing, the visual wipe advances to the next word after a bounded prediction delay; this fallback never creates a measured timing sample.
 
 ## Browser support
 
@@ -56,7 +56,7 @@ The supported starting point is Chrome Desktop, English text, and a voice that e
 
 To verify a voice manually, run `npm run demo` in Chrome Desktop, select an English voice, and:
 
-1. Play the default sentence at rate 1.6. Confirm the highlight moves through the inside of each character and each word completes at the next boundary.
+1. Play the default sentence at rate 1.6. Confirm the highlight moves through the inside of each character. Normal word boundaries complete the prior word; a late or missing boundary uses the visual fallback described above.
 2. Pause mid-word, wait, then resume. Confirm the wipe stays still during the pause and does not jump after resume.
 3. Try `go go go`, punctuation, multiple spaces, and a line break. Confirm repeated words track separately and spacing is preserved.
 4. Speak again while audio is active, then cancel. Confirm callbacks from the first session do not change the new display.

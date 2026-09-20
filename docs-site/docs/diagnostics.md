@@ -45,4 +45,6 @@ onWordTiming(sample, diagnostics) {
 
 The final word does not have a subsequent boundary, so it does not produce a measured sample. Missing or skipped boundaries also leave no sample for that interval.
 
+When a following boundary is late, GlyphFlow can move the visual wipe to the next word using its prediction. This keeps the caption moving, but it does not invent an observed duration. The live demo shows every word and marks words without a measured sample.
+
 `getDiagnostics()` returns the voice metadata, current rate, samples, mean absolute timing error, the current milliseconds-per-unit estimate, and the number of received boundaries. It is intended for host applications that want to inspect a session without GlyphFlow collecting or storing data itself.

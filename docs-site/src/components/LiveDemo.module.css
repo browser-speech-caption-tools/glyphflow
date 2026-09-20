@@ -103,9 +103,7 @@
 }
 
 .setupRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(11rem, 0.6fr);
-  gap: 1rem;
+  max-width: 18rem;
 }
 
 .field {
@@ -118,8 +116,7 @@
   letter-spacing: 0.03em;
 }
 
-.field textarea,
-.field select {
+.field textarea {
   width: 100%;
   min-width: 0;
   border: 1px solid var(--gf-border-strong);
@@ -144,7 +141,6 @@
 }
 
 .field textarea:disabled,
-.field select:disabled,
 .field input:disabled {
   opacity: 0.65;
 }

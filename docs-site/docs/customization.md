@@ -43,4 +43,4 @@ You can replace the default gradient entirely. Keep `var(--kn-progress)` as the 
 }
 ```
 
-Do not set `--kn-progress` yourself while narration is active. GlyphFlow updates it on animation frames and completes the preceding word when the next word boundary arrives.
+Do not set `--kn-progress` yourself while narration is active. GlyphFlow updates it on animation frames. A reported next-word boundary completes the previous word; if that boundary is late, a bounded visual fallback advances without recording a timing sample.

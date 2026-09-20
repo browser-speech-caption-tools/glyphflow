@@ -1,5 +1,12 @@
 export type NarratorState =
-  "idle" | "speaking" | "paused" | "ended" | "cancelled" | "error" | "unsupported";
+  | "idle"
+  | "starting"
+  | "speaking"
+  | "paused"
+  | "ended"
+  | "cancelled"
+  | "error"
+  | "unsupported";
 
 export type SpeechSynthesisSupport = { supported: boolean; reason?: string };
 
@@ -76,6 +83,7 @@ export type SpeechDriver = {
       volume: number;
     },
     events: {
+      start(): void;
       boundary(event: BoundaryEventData): void;
       end(): void;
       error(reason: string): void;

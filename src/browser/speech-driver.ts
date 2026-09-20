@@ -15,6 +15,7 @@ export function getVoices(): SpeechSynthesisVoice[] {
 }
 
 export class BrowserSpeechDriver implements SpeechDriver {
+  private utterance: SpeechSynthesisUtterance | null = null;
   supported = getSpeechSynthesisSupport;
   speak(
     text: string,
@@ -26,6 +27,7 @@ export class BrowserSpeechDriver implements SpeechDriver {
       volume: number;
     },
     events: {
+      start(): void;
       boundary(event: { charIndex: number; elapsedTime: number; name?: string }): void;
       end(): void;
       error(reason: string): void;
@@ -33,15 +35,8 @@ export class BrowserSpeechDriver implements SpeechDriver {
   ): void {
     if (!this.supported().supported) return;
     const synthesis = window.speechSynthesis;
-    // SpeechSynthesis is global to the browser profile, not to this
-    // narrator. A stale utterance from a previous page/demo can leave the
-    // queue marked as speaking while never delivering events to us. Starting
-    // a new narration is an explicit replacement, so clear that stale queue.
-    if (synthesis.speaking || synthesis.pending) synthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    // Leave the voice unset when callers request the browser default. Some
-    // engines treat an explicit `null` assignment as an invalid voice and
-    // immediately emit an `error` event without speaking.
+    this.utterance = utterance;
     const voices = synthesis.getVoices();
     const requestedVoice =
       options.voice ??
@@ -54,18 +49,21 @@ export class BrowserSpeechDriver implements SpeechDriver {
     utterance.rate = options.rate;
     utterance.pitch = options.pitch;
     utterance.volume = options.volume;
+    utterance.onstart = () => events.start();
     utterance.onboundary = (event) =>
       events.boundary({
         charIndex: event.charIndex,
         elapsedTime: event.elapsedTime,
         name: event.name,
       });
-    utterance.onend = () => events.end();
-    utterance.onerror = (event) =>
+    utterance.onend = () => {
+      if (this.utterance === utterance) this.utterance = null;
+      events.end();
+    };
+    utterance.onerror = (event) => {
+      if (this.utterance === utterance) this.utterance = null;
       events.error(event.error || "speech synthesis error");
-    // Chrome can retain the paused state after a previous utterance was
-    // cancelled. Resume only that stale paused queue before enqueueing ours;
-    // this keeps a new Speak click from becoming a silent no-op.
+    };
     if (synthesis.paused) synthesis.resume();
     synthesis.speak(utterance);
   }
@@ -76,6 +74,8 @@ export class BrowserSpeechDriver implements SpeechDriver {
     if (this.supported().supported) window.speechSynthesis.resume();
   }
   cancel(): void {
+    if (!this.utterance) return;
+    this.utterance = null;
     if (this.supported().supported) window.speechSynthesis.cancel();
   }
 }

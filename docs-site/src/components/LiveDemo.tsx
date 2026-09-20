@@ -3,17 +3,19 @@ import { useEffect, useRef, useState } from "react";
 import {
   createKaraokeNarrator,
   getSpeechSynthesisSupport,
+  getVoices,
   type KaraokeNarrator,
   type NarratorState,
   type SpeechSynthesisSupport,
   type WordTimingSample,
 } from "../../../src/index";
 import "../../../src/styles.css";
+import { tokenize } from "../../../src/tokenizer";
 
 import { claimSpeech, releaseSpeech } from "./speech-session";
 import styles from "./LiveDemo.module.css";
 
-const text = "Every letter follows the voice.";
+const exampleText = "Every letter follows the voice as the sentence unfolds.";
 
 type LiveMetrics = {
   activeWord: string;
@@ -34,7 +36,10 @@ function IdleCaption(): JSX.Element {
     <>
       <span className={styles.idleMuted}>Every </span>
       <span className={styles.idleWipe}>letter</span>
-      <span className={styles.idleMuted}> follows the voice.</span>
+      <span className={styles.idleMuted}>
+        {" "}
+        follows the voice as the sentence unfolds.
+      </span>
     </>
   );
 }
@@ -53,7 +58,11 @@ export default function LiveDemo(): JSX.Element {
   const [state, setState] = useState<NarratorState | "ready">("ready");
   const [reason, setReason] = useState<string | null>(null);
   const [support, setSupport] = useState<SpeechSynthesisSupport | null>(null);
-  const [voiceLabel, setVoiceLabel] = useState("Browser default voice");
+  const [text, setText] = useState(exampleText);
+  const [spokenText, setSpokenText] = useState(exampleText);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [voiceUri, setVoiceUri] = useState("");
+  const [rate, setRate] = useState(1.6);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [metrics, setMetrics] = useState<LiveMetrics>(initialMetrics);
   const startAtRef = useRef(0);
@@ -61,18 +70,13 @@ export default function LiveDemo(): JSX.Element {
   useEffect(() => {
     setSupport(getSpeechSynthesisSupport());
 
-    const updateVoiceLabel = () => {
-      const defaultVoice = window.speechSynthesis
-        .getVoices()
-        .find((voice) => voice.default);
-      setVoiceLabel(defaultVoice?.name ?? "Browser default voice");
-    };
-
-    updateVoiceLabel();
-    window.speechSynthesis.addEventListener("voiceschanged", updateVoiceLabel);
+    if (!getSpeechSynthesisSupport().supported) return;
+    const updateVoices = () => setVoices(getVoices());
+    updateVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", updateVoices);
 
     return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", updateVoiceLabel);
+      window.speechSynthesis.removeEventListener("voiceschanged", updateVoices);
       releaseSpeech(narratorRef.current);
       narratorRef.current?.destroy();
     };
@@ -116,22 +120,24 @@ export default function LiveDemo(): JSX.Element {
 
   function speak(): void {
     const target = targetRef.current;
-    if (!target || !support?.supported) return;
+    if (!target || !support?.supported || !text.trim()) return;
 
     releaseSpeech(narratorRef.current);
     narratorRef.current?.destroy();
     setMetrics(initialMetrics);
     setElapsedMs(0);
-    startAtRef.current = performance.now();
+    setSpokenText(text);
     narratorRef.current = createKaraokeNarrator({
       text,
       target,
+      voice: voices.find((voice) => voice.voiceURI === voiceUri),
       lang: "en-US",
-      rate: 1.05,
+      rate,
       className: styles.caption,
       onStateChange(nextState, detail) {
         setState(nextState);
         setReason(detail?.reason ?? null);
+        if (nextState === "speaking") startAtRef.current = performance.now();
         if (
           nextState === "ended" ||
           nextState === "cancelled" ||
@@ -161,10 +167,34 @@ export default function LiveDemo(): JSX.Element {
     narratorRef.current.speak();
   }
 
+  function downloadDiagnostics(): void {
+    const diagnostics = narratorRef.current?.getDiagnostics();
+    if (!diagnostics) return;
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(diagnostics, null, 2)], { type: "application/json" }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "glyphflow-diagnostics.json";
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
   const isSpeaking = state === "speaking";
+  const isActive = state === "starting" || isSpeaking || state === "paused";
+  const tokens = tokenize(state === "ready" ? text : spokenText, "en-US");
+  const samplesByIndex = new Map(
+    metrics.samples.map((sample) => [sample.index, sample]),
+  );
+  const englishVoices = voices.filter((voice) =>
+    voice.lang.toLowerCase().startsWith("en"),
+  );
+  const defaultVoiceLabel = voices.find((voice) => voice.default)?.name ?? "auto";
+  const voiceLabel =
+    voices.find((voice) => voice.voiceURI === voiceUri)?.name ?? defaultVoiceLabel;
   const timingStatus =
     state === "ended"
-      ? `${metrics.samples.length} completed word timings captured`
+      ? `${metrics.samples.length} of ${tokens.length} words measured`
       : state === "speaking"
         ? `${metrics.boundaries} boundary events received`
         : state === "starting"
@@ -196,6 +226,47 @@ export default function LiveDemo(): JSX.Element {
         <p className={styles.unsupported}>Checking browser speech support…</p>
       ) : support.supported ? (
         <>
+          <div className={styles.setup}>
+            <label className={styles.field}>
+              <span>Text to speak</span>
+              <textarea
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+                rows={2}
+                disabled={isActive}
+              />
+            </label>
+            <div className={styles.setupRow}>
+              <label className={styles.field}>
+                <span>Browser voice</span>
+                <select
+                  value={voiceUri}
+                  onChange={(event) => setVoiceUri(event.target.value)}
+                  disabled={isActive}
+                >
+                  <option value="">Browser default ({defaultVoiceLabel})</option>
+                  {englishVoices.map((voice) => (
+                    <option key={voice.voiceURI} value={voice.voiceURI}>
+                      {voice.name} · {voice.lang}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className={styles.field}>
+                <span>Speech rate: {rate.toFixed(1)}×</span>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.1"
+                  value={rate}
+                  onChange={(event) => setRate(Number(event.target.value))}
+                  disabled={isActive}
+                />
+              </label>
+            </div>
+          </div>
+
           <div className={styles.playback} data-speaking={isSpeaking}>
             <WaveIcon />
             <strong>
@@ -212,7 +283,7 @@ export default function LiveDemo(): JSX.Element {
           <div className={styles.captionFrame}>
             {state === "ready" ? (
               <p className={styles.caption} aria-hidden="true">
-                <IdleCaption />
+                {text === exampleText ? <IdleCaption /> : text}
               </p>
             ) : null}
             <p
@@ -242,7 +313,12 @@ export default function LiveDemo(): JSX.Element {
           ) : null}
 
           <div className={styles.controls}>
-            <button className={styles.primary} type="button" onClick={speak}>
+            <button
+              className={styles.primary}
+              type="button"
+              onClick={speak}
+              disabled={!text.trim()}
+            >
               <WaveIcon /> Speak
             </button>
             <button
@@ -262,9 +338,16 @@ export default function LiveDemo(): JSX.Element {
             <button
               type="button"
               onClick={() => narratorRef.current?.cancel()}
-              disabled={!isSpeaking && state !== "paused"}
+              disabled={!isActive}
             >
               Cancel
+            </button>
+            <button
+              type="button"
+              onClick={downloadDiagnostics}
+              disabled={!narratorRef.current}
+            >
+              Download diagnostics
             </button>
           </div>
 
@@ -276,7 +359,7 @@ export default function LiveDemo(): JSX.Element {
               </div>
               <span>{timingStatus}</span>
             </div>
-            {metrics.samples.length ? (
+            {state !== "ready" && tokens.length ? (
               <div className={styles.tableScroll}>
                 <table>
                   <thead>
@@ -288,17 +371,32 @@ export default function LiveDemo(): JSX.Element {
                     </tr>
                   </thead>
                   <tbody>
-                    {metrics.samples.map((sample) => (
-                      <tr key={`${sample.index}-${sample.boundaryElapsedMs}`}>
-                        <th scope="row">{sample.word}</th>
-                        <td>{Math.round(sample.predictedMs)} ms</td>
-                        <td>{Math.round(sample.actualMs)} ms</td>
-                        <td data-positive={sample.errorMs >= 0}>
-                          {sample.errorMs >= 0 ? "+" : ""}
-                          {Math.round(sample.errorMs)} ms
-                        </td>
-                      </tr>
-                    ))}
+                    {tokens.map((token, index) => {
+                      const sample = samplesByIndex.get(index);
+                      return (
+                        <tr key={`${index}-${token.start}`}>
+                          <th scope="row">{token.text}</th>
+                          {sample ? (
+                            <>
+                              <td>{Math.round(sample.predictedMs)} ms</td>
+                              <td>{Math.round(sample.actualMs)} ms</td>
+                              <td data-positive={sample.errorMs >= 0}>
+                                {sample.errorMs >= 0 ? "+" : ""}
+                                {Math.round(sample.errorMs)} ms
+                              </td>
+                            </>
+                          ) : (
+                            <td className={styles.unmeasured} colSpan={3}>
+                              {state === "ended"
+                                ? index === tokens.length - 1
+                                  ? "Not measured · final word has no next boundary"
+                                  : "Not measured · no usable next word boundary"
+                                : "Waiting for a following word boundary"}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

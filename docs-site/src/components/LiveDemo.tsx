@@ -10,9 +10,10 @@ import {
 } from "../../../src/index";
 import "../../../src/styles.css";
 
+import { claimSpeech, releaseSpeech } from "./speech-session";
 import styles from "./LiveDemo.module.css";
 
-const text = "Every spoken word fills from its first letter to its last.";
+const text = "Every letter follows the voice.";
 
 type LiveMetrics = {
   activeWord: string;
@@ -32,11 +33,8 @@ function IdleCaption(): JSX.Element {
   return (
     <>
       <span className={styles.idleMuted}>Every </span>
-      <span className={styles.idleWipe}>spoken</span>
-      <span className={styles.idleMuted}>
-        {" "}
-        word fills from its first letter to its last.
-      </span>
+      <span className={styles.idleWipe}>letter</span>
+      <span className={styles.idleMuted}> follows the voice.</span>
     </>
   );
 }
@@ -74,6 +72,7 @@ export default function LiveDemo(): JSX.Element {
 
     return () => {
       window.speechSynthesis.removeEventListener("voiceschanged", updateVoiceLabel);
+      releaseSpeech(narratorRef.current);
       narratorRef.current?.destroy();
     };
   }, []);
@@ -118,6 +117,7 @@ export default function LiveDemo(): JSX.Element {
     const target = targetRef.current;
     if (!target || !support?.supported) return;
 
+    releaseSpeech(narratorRef.current);
     narratorRef.current?.destroy();
     setMetrics(initialMetrics);
     setElapsedMs(0);
@@ -130,6 +130,14 @@ export default function LiveDemo(): JSX.Element {
       className: styles.caption,
       onStateChange(nextState, detail) {
         setState(nextState);
+        if (
+          nextState === "ended" ||
+          nextState === "cancelled" ||
+          nextState === "unsupported" ||
+          nextState === "error"
+        ) {
+          releaseSpeech(narratorRef.current);
+        }
         const diagnostics = detail?.diagnostics;
         if (diagnostics) {
           setMetrics((previous) => ({
@@ -147,6 +155,7 @@ export default function LiveDemo(): JSX.Element {
         }));
       },
     });
+    claimSpeech(narratorRef.current);
     narratorRef.current.speak();
   }
 
@@ -189,9 +198,19 @@ export default function LiveDemo(): JSX.Element {
             <span className={styles.elapsed}>{(elapsedMs / 1000).toFixed(2)} s</span>
           </div>
 
-          <p ref={targetRef} className={styles.caption} aria-live="polite">
-            {state === "ready" ? <IdleCaption /> : text}
-          </p>
+          <div className={styles.captionFrame}>
+            {state === "ready" ? (
+              <p className={styles.caption} aria-hidden="true">
+                <IdleCaption />
+              </p>
+            ) : null}
+            <p
+              ref={targetRef}
+              className={styles.caption}
+              aria-live="off"
+              hidden={state === "ready"}
+            />
+          </div>
 
           {isSpeaking ? (
             <div className={styles.progressPanel}>

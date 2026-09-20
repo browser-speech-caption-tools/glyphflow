@@ -161,8 +161,10 @@
   color: transparent;
   background: linear-gradient(
     90deg,
-    var(--gf-wipe-highlight) 0% 48.5%,
-    var(--gf-wipe-muted) 51.5% 100%
+    var(--gf-wipe-highlight) 0%,
+    var(--gf-wipe-highlight) 48.5%,
+    var(--gf-wipe-muted) 51.5%,
+    var(--gf-wipe-muted) 100%
   );
   background-position: 100% 0;
   background-repeat: no-repeat;

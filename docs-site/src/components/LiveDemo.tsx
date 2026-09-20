@@ -51,6 +51,7 @@ export default function LiveDemo(): JSX.Element {
   const targetRef = useRef<HTMLParagraphElement>(null);
   const narratorRef = useRef<KaraokeNarrator | null>(null);
   const [state, setState] = useState<NarratorState | "ready">("ready");
+  const [reason, setReason] = useState<string | null>(null);
   const [support, setSupport] = useState<SpeechSynthesisSupport | null>(null);
   const [voiceLabel, setVoiceLabel] = useState("Browser default voice");
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -130,6 +131,7 @@ export default function LiveDemo(): JSX.Element {
       className: styles.caption,
       onStateChange(nextState, detail) {
         setState(nextState);
+        setReason(detail?.reason ?? null);
         if (
           nextState === "ended" ||
           nextState === "cancelled" ||
@@ -165,9 +167,13 @@ export default function LiveDemo(): JSX.Element {
       ? `${metrics.samples.length} completed word timings captured`
       : state === "speaking"
         ? `${metrics.boundaries} boundary events received`
-        : state === "paused"
-          ? "Speech and the glyph wipe are paused"
-          : "Actual time is recorded when the next word starts";
+        : state === "starting"
+          ? "Waiting for the browser voice to start"
+          : state === "error"
+            ? (reason ?? "Browser speech could not start")
+            : state === "paused"
+              ? "Speech and the glyph wipe are paused"
+              : "Actual time is recorded when the next word starts";
 
   return (
     <section className={styles.demo} aria-labelledby="live-demo-heading">
@@ -193,7 +199,12 @@ export default function LiveDemo(): JSX.Element {
           <div className={styles.playback} data-speaking={isSpeaking}>
             <WaveIcon />
             <strong>
-              {isSpeaking ? "Speaking with" : "Uses"} {voiceLabel}
+              {isSpeaking
+                ? "Speaking with"
+                : state === "starting"
+                  ? "Starting"
+                  : "Uses"}{" "}
+              {voiceLabel}
             </strong>
             <span className={styles.elapsed}>{(elapsedMs / 1000).toFixed(2)} s</span>
           </div>

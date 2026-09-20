@@ -5,7 +5,9 @@ import { createKaraokeNarrator } from "../src/narrator";
 import type { SpeechDriver } from "../src/types";
 
 class Driver implements SpeechDriver {
+  autoStart = true;
   handlers?: {
+    start(): void;
     boundary(event: { charIndex: number; elapsedTime: number; name?: string }): void;
     end(): void;
     error(reason: string): void;
@@ -13,6 +15,7 @@ class Driver implements SpeechDriver {
   supported = () => ({ supported: true });
   speak(_text: string, _options: object, handlers: NonNullable<Driver["handlers"]>) {
     this.handlers = handlers;
+    if (this.autoStart) handlers.start();
   }
   pause = vi.fn();
   resume = vi.fn();
@@ -190,7 +193,7 @@ describe("KaraokeNarrator", () => {
     const old = driver.handlers!;
     n.cancel();
     old.end();
-    expect(states).toEqual(["speaking", "cancelled"]);
+    expect(states).toEqual(["starting", "speaking", "cancelled"]);
   });
   it("replaces a session and accepts fresh elapsed times", () => {
     const driver = new Driver();
@@ -219,6 +222,48 @@ describe("KaraokeNarrator", () => {
     n.speak();
     driver.handlers!.end();
     expect(states.at(-1)).toBe("unsupported");
+  });
+  it("reports a voice that never starts instead of claiming it is speaking", () => {
+    vi.useFakeTimers();
+    const driver = new Driver();
+    driver.autoStart = false;
+    const states: string[] = [];
+    const reasons: string[] = [];
+    const n = new KaraokeNarratorImpl({
+      text: "one",
+      target: document.createElement("div"),
+      driver,
+      onStateChange: (state, detail) => {
+        states.push(state);
+        if (detail?.reason) reasons.push(detail.reason);
+      },
+    });
+    n.speak();
+    expect(states).toEqual(["starting"]);
+    vi.advanceTimersByTime(10_000);
+    expect(states).toEqual(["starting", "error"]);
+    expect(reasons.at(-1)).toContain("did not start");
+    expect(driver.cancel).toHaveBeenCalledOnce();
+    n.destroy();
+    vi.useRealTimers();
+  });
+  it("starts animation only after the browser starts speaking", () => {
+    const driver = new Driver();
+    driver.autoStart = false;
+    const states: string[] = [];
+    const n = new KaraokeNarratorImpl({
+      text: "one two",
+      target: document.createElement("div"),
+      driver,
+      onStateChange: (state) => states.push(state),
+    });
+    n.speak();
+    expect(states).toEqual(["starting"]);
+    driver.handlers!.start();
+    expect(states).toEqual(["starting", "speaking"]);
+    driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
+    expect(n.getDiagnostics().receivedBoundaryEvents).toBe(1);
+    n.destroy();
   });
   it("cancels scheduled animation on destroy", () => {
     const driver = new Driver();

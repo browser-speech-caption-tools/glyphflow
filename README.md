@@ -46,7 +46,7 @@ The library only sets `--kn-progress` inline. Override its appearance normally:
 
 ## States and events
 
-`onStateChange` receives `idle`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. `unsupported` includes missing Web Speech support and voices that finish without usable word-boundary events. `onWordTiming` receives measured timing samples and current diagnostics. Use `getSpeechSynthesisSupport()` before creating UI; `getVoices()` safely returns an empty list until the browser populates voices (listen for `voiceschanged` in application UI).
+`onStateChange` receives `idle`, `starting`, `speaking`, `paused`, `ended`, `cancelled`, `error`, or `unsupported`. `starting` means the browser has not confirmed playback; a voice that does not start within 10 seconds reports `error`. `unsupported` includes missing Web Speech support and voices that finish without usable word-boundary events. `onWordTiming` receives measured timing samples and current diagnostics. Use `getSpeechSynthesisSupport()` before creating UI; `getVoices()` safely returns an empty list until the browser populates voices (listen for `voiceschanged` in application UI).
 
 Timing samples require two consecutive word boundaries. The final word therefore has no measured sample; it is completed when speech ends. A skipped boundary also produces no sample for that interval.
 

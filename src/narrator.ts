@@ -32,6 +32,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   private pauseAt = 0;
   private pausedMs = 0;
   private raf = 0;
+  private startTimer: ReturnType<typeof setTimeout> | undefined;
   private samples: WordTimingSample[] = [];
   private absoluteErrorTotal = 0;
   private boundaries = 0;
@@ -90,30 +91,50 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     this.boundaryElapsed = 0;
     this.boundaryElapsedScale = null;
     this.pausedMs = 0;
-    this.speechStartedAt = now();
     this.renderer.render(this.tokens, this.options.text);
-    this.setState("speaking");
+    this.setState("starting");
     this.hasUtterance = true;
-    this.driver.speak(
-      this.options.text,
-      {
-        voice: this.options.voice,
-        lang: this.options.lang,
-        rate: this.rate,
-        pitch: this.options.pitch ?? 1,
-        volume: this.options.volume ?? 1,
-      },
-      {
-        boundary: (event) => this.onBoundary(id, event),
-        end: () => this.onEnd(id),
-        error: (reason) => {
-          if (id === this.session && this.hasUtterance) {
-            this.stop(false);
-            this.setState("error", reason);
-          }
+    try {
+      this.driver.speak(
+        this.options.text,
+        {
+          voice: this.options.voice,
+          lang: this.options.lang,
+          rate: this.rate,
+          pitch: this.options.pitch ?? 1,
+          volume: this.options.volume ?? 1,
         },
-      },
-    );
+        {
+          start: () => this.onStart(id),
+          boundary: (event) => this.onBoundary(id, event),
+          end: () => this.onEnd(id),
+          error: (reason) => {
+            if (id === this.session && this.hasUtterance) {
+              this.stop(false);
+              this.setState("error", reason);
+            }
+          },
+        },
+      );
+      if (id === this.session && this.state === "starting") {
+        this.startTimer = setTimeout(() => {
+          if (id !== this.session || this.state !== "starting") return;
+          this.stop(false);
+          this.setState("error", "The browser voice did not start within 10 seconds");
+        }, 10_000);
+      }
+    } catch (error) {
+      if (id !== this.session) return;
+      this.stop(false);
+      this.setState("error", error instanceof Error ? error.message : String(error));
+    }
+  }
+  private onStart(id: number): void {
+    if (id !== this.session || this.destroyed || this.state !== "starting") return;
+    clearTimeout(this.startTimer);
+    this.startTimer = undefined;
+    this.speechStartedAt = now();
+    this.setState("speaking");
   }
   private onBoundary(
     id: number,
@@ -122,7 +143,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     if (
       id !== this.session ||
       this.destroyed ||
-      this.state !== "speaking" ||
+      (this.state !== "speaking" && this.state !== "starting") ||
       (event.name && event.name !== "word") ||
       !Number.isInteger(event.charIndex) ||
       !Number.isFinite(event.elapsedTime)
@@ -130,6 +151,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
       return;
     const index = findTokenIndex(this.tokens, event.charIndex);
     if (index < 0 || index <= this.active) return;
+    if (this.state === "starting") this.onStart(id);
     const elapsed = this.normalizeBoundaryElapsed(event.elapsedTime);
     if (elapsed < this.boundaryElapsed) return;
     this.boundaries++;
@@ -220,6 +242,8 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     this.stop(true);
   }
   private stop(notify: boolean): void {
+    clearTimeout(this.startTimer);
+    this.startTimer = undefined;
     cancelAnimationFrame(this.raf);
     this.raf = 0;
     ++this.session;
@@ -229,6 +253,8 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   }
   private onEnd(id: number): void {
     if (id !== this.session || this.destroyed || !this.hasUtterance) return;
+    clearTimeout(this.startTimer);
+    this.startTimer = undefined;
     cancelAnimationFrame(this.raf);
     this.hasUtterance = false;
     if (!this.boundaries) {

@@ -32,11 +32,17 @@ export class BrowserSpeechDriver implements SpeechDriver {
     },
   ): void {
     if (!this.supported().supported) return;
+    const synthesis = window.speechSynthesis;
+    // SpeechSynthesis is global to the browser profile, not to this
+    // narrator. A stale utterance from a previous page/demo can leave the
+    // queue marked as speaking while never delivering events to us. Starting
+    // a new narration is an explicit replacement, so clear that stale queue.
+    if (synthesis.speaking || synthesis.pending) synthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     // Leave the voice unset when callers request the browser default. Some
     // engines treat an explicit `null` assignment as an invalid voice and
     // immediately emit an `error` event without speaking.
-    const voices = window.speechSynthesis.getVoices();
+    const voices = synthesis.getVoices();
     const requestedVoice =
       options.voice ??
       voices.find((voice) => voice.default) ??
@@ -60,8 +66,8 @@ export class BrowserSpeechDriver implements SpeechDriver {
     // Chrome can retain the paused state after a previous utterance was
     // cancelled. Resume only that stale paused queue before enqueueing ours;
     // this keeps a new Speak click from becoming a silent no-op.
-    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-    window.speechSynthesis.speak(utterance);
+    if (synthesis.paused) synthesis.resume();
+    synthesis.speak(utterance);
   }
   pause(): void {
     if (this.supported().supported) window.speechSynthesis.pause();

@@ -36,7 +36,14 @@ export class BrowserSpeechDriver implements SpeechDriver {
     // Leave the voice unset when callers request the browser default. Some
     // engines treat an explicit `null` assignment as an invalid voice and
     // immediately emit an `error` event without speaking.
-    if (options.voice) utterance.voice = options.voice;
+    const voices = window.speechSynthesis.getVoices();
+    const requestedVoice =
+      options.voice ??
+      voices.find((voice) => voice.default) ??
+      voices.find((voice) =>
+        options.lang ? voice.lang.toLowerCase() === options.lang.toLowerCase() : true,
+      );
+    if (requestedVoice) utterance.voice = requestedVoice;
     utterance.lang = options.lang ?? "";
     utterance.rate = options.rate;
     utterance.pitch = options.pitch;

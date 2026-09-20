@@ -25,7 +25,9 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
   private session = 0;
   private active = -1;
   private boundaryAt = 0;
-  private boundaryElapsed = 0;
+  private observedIndex = -1;
+  private observedElapsed = 0;
+  private observedPredicted = 0;
   private boundaryElapsedScale: 1 | 1000 | null = null;
   private speechStartedAt = 0;
   private predicted = 0;
@@ -88,7 +90,9 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     this.absoluteErrorTotal = 0;
     this.boundaries = 0;
     this.active = -1;
-    this.boundaryElapsed = 0;
+    this.observedIndex = -1;
+    this.observedElapsed = 0;
+    this.observedPredicted = 0;
     this.boundaryElapsedScale = null;
     this.pausedMs = 0;
     this.renderer.render(this.tokens, this.options.text);
@@ -150,45 +154,43 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     )
       return;
     const index = findTokenIndex(this.tokens, event.charIndex);
-    if (index < 0 || index <= this.active) return;
+    if (index < 0 || index <= this.observedIndex) return;
     if (this.state === "starting") this.onStart(id);
     const elapsed = this.normalizeBoundaryElapsed(event.elapsedTime);
-    if (elapsed < this.boundaryElapsed) return;
+    if (elapsed < this.observedElapsed) return;
     this.boundaries++;
-    if (this.active < 0) {
-      for (let completed = 0; completed < index; completed++)
-        this.renderer.complete(completed);
+    const previous = this.tokens[this.observedIndex];
+    if (previous && index === this.observedIndex + 1) {
+      const actual = elapsed - this.observedElapsed;
+      const sample: WordTimingSample = {
+        index: this.observedIndex,
+        word: previous.text,
+        charIndex: previous.start,
+        predictedMs: this.observedPredicted,
+        actualMs: actual,
+        errorMs: actual - this.observedPredicted,
+        absoluteErrorMs: Math.abs(actual - this.observedPredicted),
+        boundaryElapsedMs: this.observedElapsed,
+      };
+      this.predictor.observe(previous, actual, this.rate);
+      this.samples.push(sample);
+      this.absoluteErrorTotal += sample.absoluteErrorMs;
+      this.options.onWordTiming?.(sample, this.diagnostics());
     }
-    if (this.active >= 0) {
-      const previous = this.tokens[this.active];
-      if (previous) {
-        if (index === this.active + 1) {
-          const actual = elapsed - this.boundaryElapsed;
-          const sample: WordTimingSample = {
-            index: this.active,
-            word: previous.text,
-            charIndex: previous.start,
-            predictedMs: this.predicted,
-            actualMs: actual,
-            errorMs: actual - this.predicted,
-            absoluteErrorMs: Math.abs(actual - this.predicted),
-            boundaryElapsedMs: this.boundaryElapsed,
-          };
-          this.predictor.observe(previous, actual, this.rate);
-          this.samples.push(sample);
-          this.absoluteErrorTotal += sample.absoluteErrorMs;
-          this.options.onWordTiming?.(sample, this.diagnostics());
-        }
-        for (let completed = this.active; completed < index; completed++)
-          this.renderer.complete(completed);
-      }
-    }
+    this.observedIndex = index;
+    this.observedElapsed = elapsed;
+    const token = this.tokens[index];
+    if (token) this.observedPredicted = this.predictor.predict(token, this.rate);
+
+    // A delayed boundary can describe a word already entered by the visual
+    // fallback. Keep its current fill instead of jumping back to zero.
+    if (index <= this.active) return;
+    for (let completed = Math.max(0, this.active); completed < index; completed++)
+      this.renderer.complete(completed);
     this.active = index;
-    this.boundaryElapsed = elapsed;
     this.boundaryAt = now();
     this.pausedMs = 0;
-    const token = this.tokens[index];
-    if (token) this.predicted = this.predictor.predict(token, this.rate);
+    this.predicted = this.observedPredicted;
     this.renderer.progress(index, 0);
     this.animate(id);
   }
@@ -199,7 +201,7 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     // The Web Speech specification defines elapsedTime in seconds, but some
     // Chrome desktop voices report milliseconds. Select the scale whose value
     // matches the elapsed local clock and keep it for this utterance.
-    const localElapsed = Math.max(0, now() - this.speechStartedAt - this.pausedMs);
+    const localElapsed = Math.max(0, now() - this.speechStartedAt);
     const asMilliseconds = rawElapsed;
     const asSeconds = rawElapsed * 1000;
     this.boundaryElapsedScale =
@@ -212,6 +214,16 @@ export class KaraokeNarratorImpl implements KaraokeNarrator {
     cancelAnimationFrame(this.raf);
     const tick = () => {
       if (id !== this.session || this.state !== "speaking" || this.active < 0) return;
+      const elapsed = now() - this.boundaryAt - this.pausedMs;
+      const fallbackAfter = this.predicted + Math.max(100, this.predicted * 0.35);
+      if (elapsed > fallbackAfter && this.active < this.tokens.length - 1) {
+        this.renderer.complete(this.active);
+        this.active++;
+        this.boundaryAt = now();
+        this.pausedMs = 0;
+        const next = this.tokens[this.active];
+        if (next) this.predicted = this.predictor.predict(next, this.rate);
+      }
       this.renderer.progress(
         this.active,
         this.predictor.progress(

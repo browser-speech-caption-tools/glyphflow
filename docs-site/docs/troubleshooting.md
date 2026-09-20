@@ -17,7 +17,7 @@ Confirm that you imported `@enumura1/glyphflow/styles.css` and that the selected
 
 ## Speech does not start
 
-Some browsers require speech to begin from a user gesture. Trigger `narrator.speak()` from a click or keyboard event, and check `getSpeechSynthesisSupport()` before enabling the control.
+Some browsers require speech to begin from a user gesture. Trigger `narrator.speak()` from a click or keyboard event, and check `getSpeechSynthesisSupport()` before enabling the control. If state stays at `starting` and then becomes `error`, the browser did not confirm playback. Try a direct Web Speech utterance in the same browser, then test another browser or restart the affected browser.
 
 ## Another feature's speech stopped
 

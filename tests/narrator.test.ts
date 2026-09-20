@@ -265,6 +265,35 @@ describe("KaraokeNarrator", () => {
     expect(n.getDiagnostics().receivedBoundaryEvents).toBe(1);
     n.destroy();
   });
+  it("keeps the caption moving when a following word boundary is delayed", () => {
+    let time = 0;
+    const clock = vi.spyOn(performance, "now").mockImplementation(() => time);
+    let frame: FrameRequestCallback | undefined;
+    vi.mocked(requestAnimationFrame).mockImplementation((callback) => {
+      frame = callback;
+      return 1;
+    });
+    const driver = new Driver();
+    const target = document.createElement("div");
+    const narrator = new KaraokeNarratorImpl({ text: "one two", target, driver });
+    narrator.speak();
+    driver.handlers!.boundary({ charIndex: 0, elapsedTime: 0, name: "word" });
+
+    time = 1000;
+    frame?.(time);
+    const words = target.querySelectorAll<HTMLElement>(".kn-word");
+    expect(words[0]?.style.getPropertyValue("--kn-progress")).toBe("100%");
+    time = 1100;
+    frame?.(time);
+    const beforeBoundary = words[1]?.style.getPropertyValue("--kn-progress");
+    expect(Number.parseFloat(beforeBoundary ?? "0")).toBeGreaterThan(0);
+
+    driver.handlers!.boundary({ charIndex: 4, elapsedTime: 1.1, name: "word" });
+    expect(words[1]?.style.getPropertyValue("--kn-progress")).toBe(beforeBoundary);
+    expect(narrator.getDiagnostics().samples).toHaveLength(1);
+    narrator.destroy();
+    clock.mockRestore();
+  });
   it("cancels scheduled animation on destroy", () => {
     const driver = new Driver();
     const target = document.createElement("div");

@@ -28,6 +28,19 @@ const initialMetrics: LiveMetrics = {
   samples: [],
 };
 
+function IdleCaption(): JSX.Element {
+  return (
+    <>
+      <span className={styles.idleMuted}>Every </span>
+      <span className={styles.idleWipe}>spoken</span>
+      <span className={styles.idleMuted}>
+        {" "}
+        word fills from its first letter to its last.
+      </span>
+    </>
+  );
+}
+
 function WaveIcon(): JSX.Element {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -151,8 +164,8 @@ export default function LiveDemo(): JSX.Element {
     <section className={styles.demo} aria-labelledby="live-demo-heading">
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Live timing demo</p>
-          <h2 id="live-demo-heading">Hear the sentence. Watch the letters fill.</h2>
+          <p className={styles.eyebrow}>Live speech example</p>
+          <h2 id="live-demo-heading">Press Speak. Keep your eyes on the caption.</h2>
         </div>
         <span className={styles.state} data-state={state}>
           <WaveIcon /> {state}
@@ -160,9 +173,8 @@ export default function LiveDemo(): JSX.Element {
       </div>
 
       <p className={styles.description}>
-        This runs GlyphFlow in the page using your browser&apos;s system voice. During
-        speech, the active word fills continuously from left to right; each following
-        boundary records an actual duration and tunes the next prediction.
+        The caption is the demo: one spoken word at a time fills inside its glyphs. The
+        timing record stays below after playback.
       </p>
 
       {support === null ? (
@@ -170,35 +182,34 @@ export default function LiveDemo(): JSX.Element {
       ) : support.supported ? (
         <>
           <div className={styles.playback} data-speaking={isSpeaking}>
-            <div className={styles.voice}>
-              <WaveIcon />
-              <div>
-                <span>Voice output</span>
-                <strong>{voiceLabel}</strong>
-              </div>
-            </div>
+            <WaveIcon />
+            <strong>
+              {isSpeaking ? "Speaking with" : "Uses"} {voiceLabel}
+            </strong>
             <span className={styles.elapsed}>{(elapsedMs / 1000).toFixed(2)} s</span>
           </div>
 
           <p ref={targetRef} className={styles.caption} aria-live="polite">
-            {text}
+            {state === "ready" ? <IdleCaption /> : text}
           </p>
 
-          <div className={styles.progressPanel}>
-            <div className={styles.currentWord}>
-              <span>Current spoken word</span>
-              <strong>{isSpeaking ? metrics.activeWord : "—"}</strong>
+          {isSpeaking ? (
+            <div className={styles.progressPanel}>
+              <div className={styles.currentWord}>
+                <span>Current word</span>
+                <strong>{metrics.activeWord}</strong>
+              </div>
+              <div
+                className={styles.meter}
+                aria-label={`${Math.round(metrics.progress)}% through current word`}
+              >
+                <span
+                  style={{ width: `${Math.max(0, Math.min(100, metrics.progress))}%` }}
+                />
+              </div>
+              <span>{Math.round(metrics.progress)}%</span>
             </div>
-            <div
-              className={styles.meter}
-              aria-label={`${Math.round(metrics.progress)}% through current word`}
-            >
-              <span
-                style={{ width: `${Math.max(0, Math.min(100, metrics.progress))}%` }}
-              />
-            </div>
-            <span>{Math.round(metrics.progress)}%</span>
-          </div>
+          ) : null}
 
           <div className={styles.controls}>
             <button className={styles.primary} type="button" onClick={speak}>

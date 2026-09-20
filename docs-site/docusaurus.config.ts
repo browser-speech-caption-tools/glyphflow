@@ -11,6 +11,10 @@ const config: Config = {
   onBrokenLinks: "throw",
   themeConfig: {
     image: "img/ogp.png",
+    colorMode: {
+      defaultMode: "dark",
+      respectPrefersColorScheme: false,
+    },
     navbar: {
       title: "GlyphFlow",
       logo: {

@@ -19,6 +19,8 @@ Confirm that you imported `@enumura1/glyphflow/styles.css` and that the selected
 
 Some browsers require speech to begin from a user gesture. Trigger `narrator.speak()` from a click or keyboard event, and check `getSpeechSynthesisSupport()` before enabling the control. If state stays at `starting` and then becomes `error`, the browser did not confirm playback. Try a direct Web Speech utterance in the same browser, then test another browser or restart the affected browser.
 
+For a direct browser check, run `npm run demo` and open `http://127.0.0.1:5173/speech-probe.html`. Select a voice and press **Speak directly**. This page bypasses GlyphFlow and displays the browser's `start`, `boundary`, `end`, and `error` events. If it remains at `speaking=true` without a `start` event or audible speech, the browser's speech engine has not started the utterance.
+
 ## Another feature's speech stopped
 
 The browser exposes one shared speech queue. GlyphFlow uses `speechSynthesis.cancel()` when replacing or cancelling a session, which can stop another feature's utterance. Coordinate speech ownership in the host application.

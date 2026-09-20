@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Web Speech probe</title>
+  </head>
+  <body>
+    <h1>Web Speech probe</h1>
+    <label for="voice">Voice</label>
+    <select id="voice">
+      <option value="">Browser default</option>
+    </select>
+    <button id="speak" type="button">Speak directly</button>
+    <button id="cancel" type="button">Cancel</button>
+    <pre id="log" aria-live="polite"></pre>
+    <script>
+      const output = document.querySelector("#log");
+      const voiceSelect = document.querySelector("#voice");
+      const synthesis = window.speechSynthesis;
+      let active;
+      const log = (message) => {
+        output.textContent += `${Math.round(performance.now())}ms ${message}\n`;
+      };
+      const snapshot = () =>
+        `speaking=${synthesis.speaking} pending=${synthesis.pending} paused=${synthesis.paused} voices=${synthesis.getVoices().length}`;
+      log(
+        `available=${Boolean(synthesis && window.SpeechSynthesisUtterance)} ${snapshot()}`,
+      );
+      const updateVoices = () => {
+        const voices = synthesis.getVoices();
+        voiceSelect.replaceChildren(
+          new Option("Browser default", ""),
+          ...voices.map(
+            (voice, index) =>
+              new Option(
+                `${voice.name} (${voice.lang}, ${voice.localService ? "local" : "remote"}${voice.default ? ", default" : ""})`,
+                String(index),
+              ),
+          ),
+        );
+        log(
+          `voiceschanged ${snapshot()} default=${voices.find((voice) => voice.default)?.name ?? "none"}`,
+        );
+      };
+      synthesis.addEventListener("voiceschanged", updateVoices);
+      if (synthesis.getVoices().length) updateVoices();
+      document.querySelector("#speak").onclick = () => {
+        const selected =
+          voiceSelect.value === ""
+            ? null
+            : synthesis.getVoices()[Number(voiceSelect.value)];
+        log(`clicked voice=${selected?.name ?? "browser default"} ${snapshot()}`);
+        active = new SpeechSynthesisUtterance("Watch every letter come alive.");
+        active.lang = "en-US";
+        active.rate = 1.05;
+        if (selected) active.voice = selected;
+        active.onstart = () => log(`start ${snapshot()}`);
+        active.onboundary = (event) =>
+          log(
+            `boundary name=${event.name} index=${event.charIndex} elapsed=${event.elapsedTime}`,
+          );
+        active.onend = () => log(`end ${snapshot()}`);
+        active.onerror = (event) => log(`error ${event.error} ${snapshot()}`);
+        synthesis.speak(active);
+        log(`enqueued ${snapshot()}`);
+        setTimeout(() => log(`after 2s ${snapshot()}`), 2000);
+      };
+      document.querySelector("#cancel").onclick = () => {
+        synthesis.cancel();
+        log(`cancelled ${snapshot()}`);
+      };
+    </script>
+  </body>
+</html>

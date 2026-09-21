@@ -5,13 +5,13 @@ slug: /
 hide_table_of_contents: true
 ---
 
-<div className="hero">
+<div className="gf-docs-hero">
 
 # GlyphFlow documentation
 
 GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with the Web Speech API and fills each caption word from left to right as it is spoken.
 
-<div className="hero-actions">
+<div className="gf-docs-hero-actions">
 
 <a href="./getting-started">Get started</a>
 <a href="./api">Read the API</a>
@@ -21,7 +21,7 @@ GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with 
 
 ## What it gives you
 
-<div className="feature-grid">
+<div className="gf-docs-feature-grid">
 
 <div>
 

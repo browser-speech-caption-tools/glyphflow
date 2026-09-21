@@ -5,13 +5,13 @@ slug: /
 hide_table_of_contents: true
 ---
 
-<div className="hero">
+<div className="gf-docs-hero">
 
 # GlyphFlow ドキュメント
 
 GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中の各単語を文字の内側で左から右へ連続的に塗り進める、ランタイム依存ゼロのTypeScriptライブラリです。
 
-<div className="hero-actions">
+<div className="gf-docs-hero-actions">
 
 <a href="./getting-started">使い始める</a>
 <a href="./api">APIリファレンス</a>
@@ -21,7 +21,7 @@ GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中
 
 ## できること
 
-<div className="feature-grid">
+<div className="gf-docs-feature-grid">
 
 <div>
 

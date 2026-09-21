@@ -28,3 +28,7 @@ Web Speech APIに対応していても、選択したvoiceが利用可能な単�
 ## ワイプの見た目が正しくない
 
 まず付属stylesheetを使い、アプリケーションのCSSが`background-clip`、`-webkit-text-fill-color`、`--kn-progress`を上書きしていないか確認してください。[カスタマイズ](./customization)を正常系の基準にできます。
+
+## バグを見つけた
+
+このドキュメントと異なる挙動を見つけた場合は、[GitHub Issueを作成してください](https://github.com/enumura1/glyphflow/issues/new?template=bug_report.yml)。作成前に、既存Issueとこのトラブルシューティングを確認してください。再現手順、期待する挙動と実際の挙動、GlyphFlowのバージョン、ブラウザとOSのバージョン、選択したvoiceの情報、関連する状態変化や診断情報を記載してください。最小のコード例があると調査しやすくなります。公開Issueに個人情報、秘密情報、非公開の入力テキストを含めないでください。完全な記載項目は[コントリビューションガイド](https://github.com/enumura1/glyphflow/blob/main/CONTRIBUTING.md)を参照してください。

@@ -28,3 +28,7 @@ The browser exposes one shared speech queue. GlyphFlow uses `speechSynthesis.can
 ## The wipe is not visually correct
 
 Start with the bundled stylesheet, then check application CSS for rules that override `background-clip`, `-webkit-text-fill-color`, or the `--kn-progress` property. Use the [Customization](./customization) guide as a known-good base.
+
+## I found a bug
+
+Please [open a GitHub issue](https://github.com/enumura1/glyphflow/issues/new?template=bug_report.yml) when behavior differs from this documentation. Before filing, check existing issues and this troubleshooting guide. Include reproducible steps, expected and actual behavior, GlyphFlow version, browser and OS versions, selected voice details, and relevant state changes or diagnostics. A minimal code example is especially helpful; remove private text and credentials first. See the [contribution guide](https://github.com/enumura1/glyphflow/blob/main/CONTRIBUTING.md) for the full reporting checklist.

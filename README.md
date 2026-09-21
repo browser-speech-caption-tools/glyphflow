@@ -83,6 +83,10 @@ npm run demo
 
 The contributor documentation site lives in `docs-site/`. Run `npm run docs:install` once, then `npm run docs:dev` for English or `npm run docs:dev:ja` for Japanese. Docusaurus serves one locale at a time in development; `npm run docs:build` builds both.
 
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development commands, pull request expectations, and the information to include in a bug report.
+
 ## License
 
 [MIT](./LICENSE)

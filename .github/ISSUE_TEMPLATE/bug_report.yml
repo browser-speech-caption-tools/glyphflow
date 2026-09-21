@@ -1,0 +1,100 @@
+name: Bug report
+description: Report behavior that differs from GlyphFlow's documented behavior.
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Please remove private text and other sensitive information before submitting.
+
+  - type: input
+    id: summary
+    attributes:
+      label: What happened?
+      description: Give the shortest useful description of the problem.
+      placeholder: The wipe stops after the first word boundary.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: List the smallest set of steps and the text used to reproduce the issue.
+      placeholder: |
+        1. Create a narrator with …
+        2. Select …
+        3. Call `speak()` from …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect GlyphFlow to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What did it do instead? Include error messages or screenshots if useful.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Minimal code example
+      description: Paste the smallest runnable example you can provide. Remove private text and secrets.
+      render: ts
+
+  - type: input
+    id: glyphflow-version
+    attributes:
+      label: GlyphFlow version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 128.0.6613.120
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and version
+      placeholder: macOS 15.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: voice
+    attributes:
+      label: Voice details
+      description: Include selected voice name, language, and whether it is local when known.
+      placeholder: Samantha, en-US, localService: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: State changes or diagnostics
+      description: Paste relevant `onStateChange` output or `getDiagnostics()` data after removing private text.
+      render: text
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and the troubleshooting guide.
+          required: true
+        - label: I removed private text, credentials, and other sensitive information.
+          required: true

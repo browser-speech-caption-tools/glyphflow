@@ -51,6 +51,7 @@
     "demo": "vite --config examples/basic/vite.config.ts",
     "docs:install": "npm --prefix docs-site install",
     "docs:dev": "npm --prefix docs-site run start",
+    "docs:dev:ja": "npm --prefix docs-site run start -- --locale ja",
     "docs:build": "npm --prefix docs-site run build"
   },
   "devDependencies": {

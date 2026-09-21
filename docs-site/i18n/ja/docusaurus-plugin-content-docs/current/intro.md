@@ -13,7 +13,8 @@ GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中
 
 <div className="hero-actions">
 
-[使い始める](./getting-started) [APIを読む](./api)
+<a href="./getting-started">使い始める</a>
+<a href="./api">APIリファレンス</a>
 
 </div>
 </div>

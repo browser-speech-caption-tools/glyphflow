@@ -45,21 +45,24 @@ export default function Home(): JSX.Element {
         syncHeading: "ブラウザが単語を話し始めるタイミングが、字幕を進める基準です。",
         syncBody:
           "ブラウザが単語の開始を通知すると、その単語だけが文字の内側でワイプを始めます。次の単語の開始通知を受けると、前の単語を完了します。音声の実際のタイミングに、表示の切り替わりを合わせる仕組みです。",
-        syncStart: "ブラウザが「letter」の開始を通知",
-        syncNext: "ブラウザが次の単語の開始を通知",
-        syncComplete: "「letter」のワイプを完了",
-        syncNote: "音声の実際の単語開始が、字幕を進める基準です。",
+        syncLabel: "音声と字幕の同期",
+        syncFirst: "音声が「Every」を読み始める",
+        syncSecond: "「letter」の開始で、Everyが完了",
+        syncThird: "「follows」の開始で、letterが完了",
+        syncNote:
+          "次の単語が話し始められるたびに、前の単語を完了し、現在の単語だけを文字の内側で塗り進めます。",
         calibrationEyebrow: "次のワイプを補正する",
-        calibrationHeading: "実測した時間を、後続のワイプ速度に少しだけ反映します。",
+        calibrationHeading: "話す速さに合わせて、次のワイプを少しずつ整えます。",
         calibrationBody:
-          "単語が始まった時点では、終わる時刻はまだ分かりません。GlyphFlowはまず綴りから仮の速度でワイプを始め、次の単語が始まった時に直前の単語の所要時間を確定します。その実測値の20%だけを、同じ再生中の後続予測へ反映します。",
-        estimateTitle: "まず予測して開始",
-        estimateBody: "綴りから仮の所要時間を見積もり、文字内ワイプを動かします。",
-        measureTitle: "次の単語で実測",
-        measureBody: "次の単語が始まると、直前の単語にかかった時間が確定します。",
-        adaptTitle: "後続のワイプを微調整",
-        adaptBody: "実測値の20%を取り込み、次の予測を少しだけ補正します。",
-        calibrationNote: "同じ再生の中では、文章が長いほど実測の材料が増えます。",
+          "単語が始まった時点では、終わる正確な時刻はまだ分かりません。GlyphFlowは次の単語が始まるまで、いったんおおよその速さで文字内ワイプを動かします。次の単語が始まると前の単語にかかった時間が分かるため、後ろの単語の動きを少し合わせます。",
+        currentWord: "いま読んでいる単語",
+        currentBody: "初めはおおよその速さで、文字の内側を塗り進めます。",
+        nextWordStarts: "次の単語が始まる",
+        measuredTime: "前の単語にかかった実際の時間が分かる",
+        nextWord: "次の単語",
+        nextBody: "分かった時間を少しだけ反映して、次のワイプを始めます。",
+        calibrationNote:
+          "これは文字ごとの発音に合わせる機能ではありません。ブラウザが単語の開始を知らせるvoiceで動きます。",
       }
     : {
         title: "Speech-aware captions for the browser",
@@ -82,25 +85,24 @@ export default function Home(): JSX.Element {
         syncHeading: "The browser's word starts are what move the caption forward.",
         syncBody:
           "When the browser reports that a word has started, only that word begins its inside-letter wipe. When it reports the following word, GlyphFlow completes the prior word. The caption changes on the voice's actual timing.",
-        syncStart: "Browser reports “letter” has started",
-        syncNext: "Browser reports the next word has started",
-        syncComplete: "Complete the “letter” wipe",
-        syncNote: "Actual word starts from the voice are the source of truth.",
+        syncLabel: "Voice and caption in sync",
+        syncFirst: "The voice begins “Every”",
+        syncSecond: "“letter” begins; Every completes",
+        syncThird: "“follows” begins; letter completes",
+        syncNote:
+          "Each next-word start completes the prior word and begins the inside-letter wipe for the current one.",
         calibrationEyebrow: "Tune the next wipe",
-        calibrationHeading: "Measured time slightly adjusts later wipe speeds.",
+        calibrationHeading: "Later wipes gently adapt to the voice's pace.",
         calibrationBody:
-          "A word's end time is unknown when it begins. GlyphFlow starts with a spelling-based estimate, then confirms the previous word's duration when the next word starts. It applies only 20% of that measurement to later predictions in the same narration.",
-        estimateTitle: "Start with an estimate",
-        estimateBody:
-          "Estimate a duration from the spelling, then begin the inside-letter wipe.",
-        measureTitle: "Measure at the next word",
-        measureBody:
-          "When the next word begins, the prior word's duration becomes known.",
-        adaptTitle: "Gently tune later wipes",
-        adaptBody:
-          "Use 20% of the measurement to make the next estimate a little better.",
+          "A word's exact end time is unknown when it starts. GlyphFlow moves the inside-letter wipe at an approximate pace until the next word begins. That next-word start reveals how long the prior word took, so later wipes can adjust a little to the voice's pace.",
+        currentWord: "Word being spoken",
+        currentBody: "Start the inside-letter wipe at an approximate pace.",
+        nextWordStarts: "The next word begins",
+        measuredTime: "The prior word's actual duration is now known",
+        nextWord: "Next word",
+        nextBody: "Use a small part of that result when starting the next wipe.",
         calibrationNote:
-          "Longer passages provide more measurements within the same narration.",
+          "This is not character-by-character pronunciation timing. It works with voices that report word starts to the browser.",
       };
 
   return (
@@ -158,20 +160,39 @@ export default function Home(): JSX.Element {
             <p>{copy.syncBody}</p>
           </div>
           <div className={styles.syncStage} aria-label={copy.syncHeading}>
-            <div className={styles.syncEvent}>
-              <SpeechIcon /> <span>{copy.syncStart}</span>
+            <div className={styles.syncLabel}>
+              <SpeechIcon /> {copy.syncLabel}
             </div>
-            <div className={styles.syncSentence} aria-hidden="true">
-              <span>Every</span>
-              <strong>letter</strong>
-              <span>follows</span>
-              <span>the voice.</span>
-            </div>
-            <div className={styles.syncOutcome}>
-              <span>{copy.syncNext}</span>
-              <strong>{copy.syncComplete}</strong>
-            </div>
-            <p>{copy.syncNote}</p>
+            <ol className={styles.syncFrames}>
+              <li>
+                <p>{copy.syncFirst}</p>
+                <div className={styles.syncWords} aria-hidden="true">
+                  <strong data-state="active">Every</strong>
+                  <span>letter</span>
+                  <span>follows</span>
+                  <span>the voice.</span>
+                </div>
+              </li>
+              <li>
+                <p>{copy.syncSecond}</p>
+                <div className={styles.syncWords} aria-hidden="true">
+                  <strong data-state="complete">Every</strong>
+                  <strong data-state="active">letter</strong>
+                  <span>follows</span>
+                  <span>the voice.</span>
+                </div>
+              </li>
+              <li>
+                <p>{copy.syncThird}</p>
+                <div className={styles.syncWords} aria-hidden="true">
+                  <strong data-state="complete">Every</strong>
+                  <strong data-state="complete">letter</strong>
+                  <strong data-state="active">follows</strong>
+                  <span>the voice.</span>
+                </div>
+              </li>
+            </ol>
+            <p className={styles.syncNote}>{copy.syncNote}</p>
           </div>
         </section>
 
@@ -182,29 +203,25 @@ export default function Home(): JSX.Element {
             <p>{copy.calibrationBody}</p>
           </div>
           <div className={styles.calibrationStage} aria-label={copy.calibrationHeading}>
-            <ol className={styles.calibrationSteps}>
-              <li>
-                <span>1</span>
+            <div className={styles.calibrationDiagram}>
+              <div className={styles.calibrationNode}>
+                <span>{copy.currentWord}</span>
+                <strong data-state="active">Every</strong>
+                <p>{copy.currentBody}</p>
+              </div>
+              <div className={styles.calibrationArrow}>
                 <div>
-                  <strong>{copy.estimateTitle}</strong>
-                  <p>{copy.estimateBody}</p>
+                  <SpeechIcon /> <span>{copy.nextWordStarts}</span>
                 </div>
-              </li>
-              <li>
-                <span>2</span>
-                <div>
-                  <strong>{copy.measureTitle}</strong>
-                  <p>{copy.measureBody}</p>
-                </div>
-              </li>
-              <li>
-                <span>3</span>
-                <div>
-                  <strong>{copy.adaptTitle}</strong>
-                  <p>{copy.adaptBody}</p>
-                </div>
-              </li>
-            </ol>
+                <i aria-hidden="true" />
+                <p>{copy.measuredTime}</p>
+              </div>
+              <div className={styles.calibrationNode}>
+                <span>{copy.nextWord}</span>
+                <strong data-state="active">letter</strong>
+                <p>{copy.nextBody}</p>
+              </div>
+            </div>
             <p className={styles.calibrationNote}>{copy.calibrationNote}</p>
           </div>
         </section>

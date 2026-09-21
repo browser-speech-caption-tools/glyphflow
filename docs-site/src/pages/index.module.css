@@ -149,7 +149,7 @@
   gap: 2rem;
 }
 .stageLabel,
-.syncEvent {
+.syncLabel {
   display: inline-flex;
   align-items: center;
   justify-self: start;
@@ -161,7 +161,7 @@
   text-transform: uppercase;
 }
 .stageLabel svg,
-.syncEvent svg {
+.syncLabel svg {
   width: 1.2rem;
   height: 1.2rem;
   animation: speechWave 850ms ease-in-out infinite;
@@ -205,104 +205,161 @@
   align-content: center;
   gap: 1.5rem;
 }
-.syncSentence {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.2em 0.34em;
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--gf-border);
-  border-bottom: 1px solid var(--gf-border);
-  color: var(--gf-muted);
-  font-size: clamp(2.3rem, 5vw, 4.4rem);
-  font-weight: 780;
-  letter-spacing: -0.06em;
-  line-height: 1.02;
-}
-.syncSentence strong {
-  color: transparent;
-  background: linear-gradient(
-    90deg,
-    var(--gf-wipe-highlight) 0%,
-    var(--gf-wipe-highlight) 48.5%,
-    var(--gf-wipe-muted) 51.5%,
-    var(--gf-wipe-muted) 100%
-  );
-  background-position: 100% 0;
-  background-repeat: no-repeat;
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: wipe 4.8s linear infinite;
-}
-.syncOutcome {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.8rem;
-  color: var(--gf-muted);
-  font-size: 0.86rem;
-}
-.syncOutcome::before {
-  width: 1.75rem;
-  height: 1px;
-  background: var(--ifm-color-primary);
-  content: "";
-}
-.syncOutcome strong {
-  color: var(--gf-heading);
-  font-size: 1rem;
-}
-.syncStage > p {
-  max-width: 27rem;
-  margin: 0;
-  color: var(--gf-muted);
-  line-height: 1.6;
-}
-.calibrationSteps {
+.syncFrames {
   display: grid;
   gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.calibrationSteps li {
-  display: grid;
-  grid-template-columns: 2.1rem 1fr;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--gf-border);
+.syncFrames li {
+  position: relative;
+  padding: 0.95rem 0 1.15rem 1.35rem;
+  border-left: 1px solid var(--gf-border-strong);
 }
-.calibrationSteps li:last-child {
-  border-bottom: 1px solid var(--gf-border);
-}
-.calibrationSteps > li > span {
-  display: grid;
-  width: 2.1rem;
-  height: 2.1rem;
-  place-items: center;
-  border: 1px solid var(--ifm-color-primary);
+.syncFrames li::before {
+  position: absolute;
+  top: 1.28rem;
+  left: -0.3rem;
+  width: 0.56rem;
+  height: 0.56rem;
   border-radius: 50%;
-  color: var(--ifm-color-primary);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.78rem;
-  font-weight: 800;
+  background: var(--ifm-color-primary);
+  box-shadow: 0 0 0 0.28rem var(--gf-preview-background);
+  content: "";
 }
-.calibrationSteps strong {
-  display: block;
+.syncFrames li:last-child {
+  padding-bottom: 0.1rem;
+}
+.syncFrames p {
+  margin: 0 0 0.6rem;
   color: var(--gf-heading);
-  font-size: 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
 }
-.calibrationSteps p,
-.calibrationNote {
-  margin: 0.35rem 0 0;
+.syncWords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.12em 0.3em;
   color: var(--gf-muted);
-  font-size: 0.88rem;
-  line-height: 1.55;
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+  font-weight: 780;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+.syncWords strong[data-state="complete"] {
+  color: var(--gf-wipe-highlight);
+}
+.syncWords strong[data-state="active"] {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--gf-wipe-highlight) 0%,
+    var(--gf-wipe-highlight) 48%,
+    var(--gf-wipe-muted) 52%,
+    var(--gf-wipe-muted) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.syncNote {
+  max-width: 27rem;
+  margin: 0;
+  color: var(--gf-muted);
+  line-height: 1.6;
+}
+.calibrationDiagram {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7.5rem, 0.75fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+.calibrationNode {
+  min-height: 13.5rem;
+  border: 1px solid var(--gf-border-strong);
+  border-radius: 0.9rem;
+  padding: 1.25rem;
+  background: var(--gf-surface-hover);
+}
+.calibrationNode > span {
+  display: block;
+  color: var(--gf-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.calibrationNode strong {
+  display: block;
+  margin: 1.2rem 0 0.85rem;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--gf-wipe-highlight) 0%,
+    var(--gf-wipe-highlight) 48%,
+    var(--gf-wipe-muted) 52%,
+    var(--gf-wipe-muted) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+.calibrationNode p,
+.calibrationArrow p,
+.calibrationNote {
+  margin: 0;
+  color: var(--gf-muted);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+.calibrationArrow {
+  display: grid;
+  justify-items: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+.calibrationArrow > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.calibrationArrow svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  animation: speechWave 850ms ease-in-out infinite;
+}
+.calibrationArrow i {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--ifm-color-primary);
+}
+.calibrationArrow i::after {
+  position: absolute;
+  top: -0.23rem;
+  right: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 1px solid var(--ifm-color-primary);
+  border-right: 1px solid var(--ifm-color-primary);
+  content: "";
+  transform: rotate(45deg);
+}
+.calibrationArrow p {
+  color: var(--gf-heading);
+  font-weight: 650;
 }
 .calibrationNote {
-  margin-top: 0;
+  margin-top: 0.15rem;
   color: var(--ifm-color-primary);
 }
 
@@ -314,7 +371,8 @@
     background-position: 0 0;
   }
   .stageLabel svg,
-  .syncEvent svg {
+  .syncLabel svg,
+  .calibrationArrow svg {
     animation: none;
   }
 }
@@ -330,6 +388,27 @@
   .storyReverse > :last-child {
     grid-column: 1;
     grid-row: auto;
+  }
+  .calibrationDiagram {
+    grid-template-columns: 1fr;
+  }
+  .calibrationNode {
+    min-height: auto;
+  }
+  .calibrationArrow {
+    grid-template-columns: 1fr auto;
+    justify-items: stretch;
+    text-align: left;
+  }
+  .calibrationArrow > div {
+    grid-column: 1;
+    justify-self: start;
+  }
+  .calibrationArrow i {
+    grid-column: 1;
+  }
+  .calibrationArrow p {
+    grid-column: 1;
   }
 }
 @media (max-width: 460px) {

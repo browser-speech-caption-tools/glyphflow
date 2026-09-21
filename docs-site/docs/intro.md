@@ -13,7 +13,8 @@ GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with 
 
 <div className="hero-actions">
 
-[Get started](./getting-started) [Read the API](./api)
+<a href="./getting-started">Get started</a>
+<a href="./api">Read the API</a>
 
 </div>
 </div>

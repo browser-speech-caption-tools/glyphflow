@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import {
   createKaraokeNarrator,
   getSpeechSynthesisSupport,
@@ -23,6 +24,38 @@ function SpeechIcon(): JSX.Element {
 }
 
 export default function HeroSpeech(): JSX.Element {
+  const isJapanese = useDocusaurusContext().i18n.currentLocale === "ja";
+  const copy = isJapanese
+    ? {
+        ariaLabel: "音声同期字幕のプレビュー",
+        speaking: "読み上げ中",
+        starting: "音声を開始中",
+        browserSpeech: "ブラウザ音声",
+        hint: "5語 · 単語ごとに連続した文字内ワイプ",
+        ready: "文を再生してタイミングを確認",
+        unsupported: "このvoiceは単語境界を返しませんでした",
+        error: "ブラウザの音声を開始できませんでした",
+        ended: "再生完了 · もう一度再生",
+        waiting: "ブラウザの音声開始を待っています",
+        active: "ブラウザの音声がこの字幕を動かします",
+        speak: "Speak",
+        replay: "もう一度再生",
+      }
+    : {
+        ariaLabel: "Speech synchronized caption preview",
+        speaking: "Speaking",
+        starting: "Starting voice",
+        browserSpeech: "Browser speech",
+        hint: "Five words · one continuous wipe per word",
+        ready: "Play the sentence to hear the timing",
+        unsupported: "This voice did not provide word boundaries",
+        error: "Browser speech could not start",
+        ended: "Playback complete · play again",
+        waiting: "Waiting for the browser to start speaking",
+        active: "The browser voice drives this caption",
+        speak: "Speak",
+        replay: "Replay",
+      };
   const targetRef = useRef<HTMLParagraphElement>(null);
   const narratorRef = useRef<KaraokeNarrator | null>(null);
   const [supported, setSupported] = useState(false);
@@ -64,17 +97,17 @@ export default function HeroSpeech(): JSX.Element {
   }
 
   return (
-    <div className={styles.preview} aria-label="Speech synchronized caption preview">
+    <div className={styles.preview} aria-label={copy.ariaLabel}>
       <div className={styles.topline}>
         <span className={styles.voice} data-speaking={state === "speaking"}>
           <SpeechIcon />{" "}
           {state === "speaking"
-            ? "Speaking"
+            ? copy.speaking
             : state === "starting"
-              ? "Starting voice"
-              : "Browser speech"}
+              ? copy.starting
+              : copy.browserSpeech}
         </span>
-        <span className={styles.hint}>Five words · one continuous wipe per word</span>
+        <span className={styles.hint}>{copy.hint}</span>
       </div>
 
       <div className={styles.captionFrame}>
@@ -103,21 +136,21 @@ export default function HeroSpeech(): JSX.Element {
       <div className={styles.footer}>
         <span>
           {state === "ready"
-            ? "Play the sentence to hear the timing"
+            ? copy.ready
             : state === "unsupported"
-              ? "This voice did not provide word boundaries"
+              ? copy.unsupported
               : state === "error"
-                ? (reason ?? "Browser speech could not start")
+                ? (reason ?? copy.error)
                 : state === "ended"
-                  ? "Playback complete · play again"
+                  ? copy.ended
                   : state === "starting"
-                    ? "Waiting for the browser to start speaking"
+                    ? copy.waiting
                     : state === "speaking"
-                      ? "The browser voice drives this caption"
+                      ? copy.active
                       : state}
         </span>
         <button type="button" onClick={speak} disabled={!supported}>
-          <SpeechIcon /> {state === "speaking" ? "Replay" : "Speak"}
+          <SpeechIcon /> {state === "speaking" ? copy.replay : copy.speak}
         </button>
       </div>
     </div>

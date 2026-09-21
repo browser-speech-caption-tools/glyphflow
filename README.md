@@ -1,6 +1,6 @@
 # GlyphFlow
 
-**A zero-runtime-dependency browser library that speaks English text with Web Speech API while smoothly wiping each caption word from left to right.**
+**A browser library that speaks English text with Web Speech API while smoothly wiping each caption word from left to right.**
 
 > Demo media placeholder — add a GIF or screenshot here before publishing.
 

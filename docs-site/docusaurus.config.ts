@@ -9,6 +9,13 @@ const config: Config = {
   organizationName: "enumura1",
   projectName: "glyphflow",
   onBrokenLinks: "throw",
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "ja"],
+    localeConfigs: {
+      ja: { label: "日本語" },
+    },
+  },
   themeConfig: {
     image: "img/ogp.png",
     colorMode: {
@@ -31,6 +38,7 @@ const config: Config = {
           label: "GitHub",
           position: "right",
         },
+        { type: "localeDropdown", position: "right" },
       ],
     },
     footer: {

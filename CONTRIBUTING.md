@@ -1,6 +1,15 @@
 # Contributing to GlyphFlow
 
-Thanks for helping improve GlyphFlow. Small, focused bug reports, documentation fixes, tests, and pull requests are all welcome.
+GlyphFlow is actively welcoming contributors. Whether you report a bug, improve documentation, add a test, or propose a focused implementation, your contribution is welcome.
+
+## Ways to help
+
+- Report a reproducible bug or an unsupported browser/voice behavior.
+- Improve examples, documentation, translations, or accessibility.
+- Add focused tests for an existing behavior.
+- Propose a scoped improvement in an issue before implementing it.
+
+Small contributions are valuable. A clear issue or documentation correction is just as useful as a code change.
 
 ## Reporting a bug
 

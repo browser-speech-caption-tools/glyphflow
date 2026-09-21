@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: はじめに
+title: 使い始める
 ---
 
 ## インストール

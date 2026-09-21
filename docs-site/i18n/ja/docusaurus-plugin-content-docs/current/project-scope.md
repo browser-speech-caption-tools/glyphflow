@@ -12,7 +12,6 @@ GlyphFlowの役割は、ブラウザ標準の音声で英語テキストを読�
 | 音声     | ブラウザのWeb Speech API（`speechSynthesis`）             |
 | 字幕     | 単語境界に合わせたCSSグラデーションによる単語内部のワイプ |
 | 統合     | framework非依存のTypeScript DOM API。SSR importに対応     |
-| 依存     | ランタイム依存ゼロ                                        |
 | 初期対象 | Desktop Chrome、英語テキスト、単語境界を返すvoice         |
 
 ## 意図的な対象外

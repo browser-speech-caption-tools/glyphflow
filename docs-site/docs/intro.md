@@ -35,7 +35,7 @@ Each word fills from left to right with a CSS gradient. It is not a whole-word c
 
 ### Browser-native speech
 
-It uses `window.speechSynthesis`. There are no audio files, servers, external models, storage, analytics, or runtime dependencies.
+It uses `window.speechSynthesis`. There are no audio files, servers, external models, storage, or analytics.
 
 </div>
 

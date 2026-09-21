@@ -15,6 +15,8 @@ import { claimSpeech, releaseSpeech } from "./speech-session";
 import styles from "./LiveDemo.module.css";
 
 const exampleText = "Every letter follows the voice as the sentence unfolds.";
+const isEnglishDemoText = (value: string) =>
+  /^[\t\n\r\x20-\x7e]*$/.test(value) && /[A-Za-z]/.test(value);
 
 type LiveMetrics = {
   activeWord: string;
@@ -111,7 +113,7 @@ export default function LiveDemo(): JSX.Element {
 
   function speak(): void {
     const target = targetRef.current;
-    if (!target || !support?.supported || !text.trim()) return;
+    if (!target || !support?.supported || !isEnglishDemoText(text)) return;
 
     releaseSpeech(narratorRef.current);
     narratorRef.current?.destroy();
@@ -172,6 +174,8 @@ export default function LiveDemo(): JSX.Element {
 
   const isSpeaking = state === "speaking";
   const isActive = state === "starting" || isSpeaking || state === "paused";
+  const canSpeak = isEnglishDemoText(text);
+  const invalidText = text.trim().length > 0 && !canSpeak;
   const tokens = tokenize(state === "ready" ? text : spokenText, "en-US");
   const samplesByIndex = new Map(
     metrics.samples.map((sample) => [sample.index, sample]),
@@ -212,14 +216,26 @@ export default function LiveDemo(): JSX.Element {
         <>
           <div className={styles.setup}>
             <label className={styles.field}>
-              <span>Text to speak</span>
+              <span>English text to speak</span>
               <textarea
                 value={text}
                 onChange={(event) => setText(event.target.value)}
                 rows={2}
                 disabled={isActive}
+                lang="en"
+                aria-describedby="live-demo-text-help"
+                aria-invalid={invalidText}
+                data-invalid={invalidText}
               />
             </label>
+            <p
+              id="live-demo-text-help"
+              className={invalidText ? styles.inputError : styles.inputHint}
+            >
+              {invalidText
+                ? "This live demo supports English text only."
+                : "English text only. Japanese and other languages are outside the v0.1 support target."}
+            </p>
             <div className={styles.setupRow}>
               <label className={styles.field}>
                 <span>Speech rate: {rate.toFixed(1)}×</span>
@@ -286,7 +302,7 @@ export default function LiveDemo(): JSX.Element {
               className={styles.primary}
               type="button"
               onClick={speak}
-              disabled={!text.trim()}
+              disabled={!canSpeak}
             >
               <WaveIcon /> Speak
             </button>

@@ -130,6 +130,10 @@
   letter-spacing: 0;
 }
 
+.field textarea[data-invalid="true"] {
+  border-color: #c15a5a;
+}
+
 .field textarea {
   resize: vertical;
   line-height: 1.45;
@@ -143,6 +147,21 @@
 .field textarea:disabled,
 .field input:disabled {
   opacity: 0.65;
+}
+
+.inputHint,
+.inputError {
+  margin: -0.45rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.inputHint {
+  color: var(--gf-muted);
+}
+
+.inputError {
+  color: #b94040;
 }
 
 .playback {

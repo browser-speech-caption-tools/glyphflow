@@ -132,8 +132,8 @@
   grid-row: 1;
 }
 .glyphStage,
-.timingStage,
-.adjustStage {
+.syncStage,
+.calibrationStage {
   min-height: 23rem;
   border: 1px solid var(--gf-preview-border);
   border-radius: 1.2rem;
@@ -149,7 +149,7 @@
   gap: 2rem;
 }
 .stageLabel,
-.boundaryEvent {
+.syncEvent {
   display: inline-flex;
   align-items: center;
   justify-self: start;
@@ -161,7 +161,7 @@
   text-transform: uppercase;
 }
 .stageLabel svg,
-.boundaryEvent svg {
+.syncEvent svg {
   width: 1.2rem;
   height: 1.2rem;
   animation: speechWave 850ms ease-in-out infinite;
@@ -199,101 +199,111 @@
   height: 1px;
   background: linear-gradient(90deg, var(--gf-wipe-muted), var(--gf-wipe-highlight));
 }
-.timingStage,
-.adjustStage {
+.syncStage,
+.calibrationStage {
   display: grid;
   align-content: center;
   gap: 1.5rem;
 }
-.boundaryEvent strong {
-  color: var(--gf-heading);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.78rem;
-}
-.sampleRow {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.55rem 1.5rem;
+.syncSentence {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2em 0.34em;
+  padding: 1.5rem 0;
   border-top: 1px solid var(--gf-border);
   border-bottom: 1px solid var(--gf-border);
-  padding: 1.25rem 0;
   color: var(--gf-muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  font-weight: 780;
+  letter-spacing: -0.06em;
+  line-height: 1.02;
 }
-.sampleRow strong {
+.syncSentence strong {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--gf-wipe-highlight) 0%,
+    var(--gf-wipe-highlight) 48.5%,
+    var(--gf-wipe-muted) 51.5%,
+    var(--gf-wipe-muted) 100%
+  );
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wipe 4.8s linear infinite;
+}
+.syncOutcome {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--gf-muted);
+  font-size: 0.86rem;
+}
+.syncOutcome::before {
+  width: 1.75rem;
+  height: 1px;
+  background: var(--ifm-color-primary);
+  content: "";
+}
+.syncOutcome strong {
   color: var(--gf-heading);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 1.1rem;
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 1rem;
 }
-.timingStage p {
+.syncStage > p {
   max-width: 27rem;
   margin: 0;
   color: var(--gf-muted);
   line-height: 1.6;
 }
-.adjustHeader,
-.adjustFooter {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+.calibrationSteps {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.calibrationSteps li {
+  display: grid;
+  grid-template-columns: 2.1rem 1fr;
   gap: 1rem;
-  color: var(--gf-muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  padding: 1rem 0;
+  border-top: 1px solid var(--gf-border);
 }
-.adjustHeader strong,
-.adjustFooter strong {
-  color: var(--gf-heading);
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.95rem;
-  letter-spacing: 0;
-  text-transform: none;
+.calibrationSteps li:last-child {
+  border-bottom: 1px solid var(--gf-border);
 }
-.adjustLine {
-  position: relative;
-  height: 5rem;
-  border-bottom: 1px solid var(--gf-border-strong);
-}
-.adjustLine::before {
-  position: absolute;
-  right: 15%;
-  bottom: 0;
-  left: 9%;
-  height: 2.5rem;
-  border-top: 2px solid var(--ifm-color-primary);
-  border-radius: 50% 50% 0 0;
-  content: "";
-  transform: skewX(-18deg);
-}
-.adjustLine i {
-  position: absolute;
-  right: 15%;
-  bottom: -0.32rem;
-  width: 0.65rem;
-  height: 0.65rem;
+.calibrationSteps > li > span {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  place-items: center;
+  border: 1px solid var(--ifm-color-primary);
   border-radius: 50%;
-  background: var(--gf-wipe-highlight);
-  box-shadow: 0 0 0 0.28rem var(--gf-preview-background);
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  font-weight: 800;
 }
-.predictionMark,
-.observedMark {
-  position: absolute;
+.calibrationSteps strong {
+  display: block;
+  color: var(--gf-heading);
+  font-size: 1rem;
+}
+.calibrationSteps p,
+.calibrationNote {
+  margin: 0.35rem 0 0;
   color: var(--gf-muted);
-  font-size: 0.72rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
 }
-.predictionMark {
-  bottom: 2.7rem;
-  left: 9%;
-}
-.observedMark {
-  right: 7%;
-  bottom: 0.7rem;
-  color: var(--gf-wipe-highlight);
+.calibrationNote {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -304,7 +314,7 @@
     background-position: 0 0;
   }
   .stageLabel svg,
-  .boundaryEvent svg {
+  .syncEvent svg {
     animation: none;
   }
 }

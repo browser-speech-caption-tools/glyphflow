@@ -9,7 +9,7 @@ hide_table_of_contents: true
 
 # GlyphFlow ドキュメント
 
-GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中の各単語を文字の内側で左から右へ連続的に塗り進める、ランタイム依存ゼロのTypeScriptライブラリです。
+GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中の各単語を文字の内側で左から右へ連続的に塗り進めるTypeScriptライブラリです。
 
 <div className="gf-docs-hero-actions">
 
@@ -35,7 +35,7 @@ GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中
 
 ### ブラウザ標準の音声
 
-`window.speechSynthesis`だけを使います。音声ファイル、サーバー、外部モデル、保存領域、分析機能、ランタイム依存はありません。
+`window.speechSynthesis`だけを使います。音声ファイル、サーバー、外部モデル、保存領域、分析機能はありません。
 
 </div>
 

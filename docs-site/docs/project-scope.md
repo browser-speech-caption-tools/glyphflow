@@ -12,7 +12,6 @@ GlyphFlow has one browser-native job: speak English text while filling each spok
 | Speech         | Browser Web Speech API (`speechSynthesis`)                                 |
 | Caption        | A continuous CSS-gradient wipe inside each word, guided by word boundaries |
 | Integration    | Framework-independent TypeScript DOM API; safe to import during SSR        |
-| Dependencies   | Zero runtime dependencies                                                  |
 | Initial target | Desktop Chrome, English text, voices that emit word boundaries             |
 
 ## Deliberate boundaries

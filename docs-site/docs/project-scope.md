@@ -26,15 +26,6 @@ GlyphFlow has one browser-native job: speak English text while filling each spok
 
 Voice quality and boundary behavior come from the browser and operating system, not GlyphFlow.
 
-## Roadmap
-
-| Planned exploration                      | v0.1 status  |
-| ---------------------------------------- | ------------ |
-| Framework adapters                       | Not included |
-| Optional custom renderer                 | Not included |
-| Empirical voice compatibility matrix     | Not included |
-| Text plus provided-audio synchronization | Out of scope |
-
 ## Development commands
 
 ```sh

@@ -81,7 +81,7 @@ npm run build
 npm run demo
 ```
 
-The contributor documentation site lives in `docs-site/`. Run `npm run docs:install` once, then `npm run docs:dev`.
+The contributor documentation site lives in `docs-site/`. Run `npm run docs:install` once, then `npm run docs:dev` for English or `npm run docs:dev:ja` for Japanese. Docusaurus serves one locale at a time in development; `npm run docs:build` builds both.
 
 ## Roadmap
 

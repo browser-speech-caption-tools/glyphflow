@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import {
   createKaraokeNarrator,
   getSpeechSynthesisSupport,
@@ -54,6 +55,86 @@ function WaveIcon(): JSX.Element {
 }
 
 export default function LiveDemo(): JSX.Element {
+  const isJapanese = useDocusaurusContext().i18n.currentLocale === "ja";
+  const copy = isJapanese
+    ? {
+        liveExample: "ライブ音声デモ",
+        heading: "Speakを押して、字幕の動きを見てください。",
+        description:
+          "この字幕自体がデモです。読み上げ中の単語は、文字の内側で順番に塗り進みます。再生後も下に計測結果が残ります。",
+        checking: "ブラウザの音声対応を確認しています…",
+        textLabel: "読み上げる英語テキスト",
+        invalidInput: "このライブデモは英語テキストのみ対応しています。",
+        inputHint:
+          "このデモで入力・読み上げできるのは英語のみです。日本語などはv0.1の対応対象外です。",
+        rate: "読み上げ速度",
+        speakingWith: "ブラウザ既定のvoiceで読み上げ中",
+        starting: "音声を開始しています",
+        usesVoice: "ブラウザ既定のvoiceを使用",
+        currentWord: "現在の単語",
+        speak: "Speak",
+        pause: "Pause",
+        resume: "Resume",
+        cancel: "Cancel",
+        download: "診断情報をダウンロード",
+        timingTrace: "タイミング記録",
+        measured: "ブラウザが計測した内容",
+        wordsMeasured: (measured: number, total: number) => `${total}語中${measured}語を計測済み`,
+        boundaries: (count: number) => `単語境界イベントを${count}件受信`,
+        waitingStart: "ブラウザの音声開始を待っています",
+        speechError: "ブラウザの音声を開始できませんでした",
+        paused: "音声と文字内ワイプを一時停止しています",
+        actualNote: "実測時間は次の単語が始まった時点で記録されます",
+        word: "単語",
+        predicted: "予測",
+        observed: "実測",
+        difference: "差分",
+        finalNotMeasured: "未計測 · 最終単語には次の境界がありません",
+        boundaryNotMeasured: "未計測 · 利用可能な次の単語境界がありません",
+        waitingBoundary: "次の単語境界を待っています",
+        emptyTrace: "Speakを押してください。次の単語境界が届くと、最初の完了単語がここに表示されます。",
+        unavailable:
+          "このブラウザではWeb Speech APIを利用できないため、ここでライブ読み上げを開始できません。",
+      }
+    : {
+        liveExample: "Live speech example",
+        heading: "Press Speak. Keep your eyes on the caption.",
+        description:
+          "The caption is the demo: one spoken word at a time fills inside its glyphs. The timing record stays below after playback.",
+        checking: "Checking browser speech support…",
+        textLabel: "English text to speak",
+        invalidInput: "This live demo supports English text only.",
+        inputHint: "English text only. Japanese and other languages are outside the v0.1 support target.",
+        rate: "Speech rate",
+        speakingWith: "Speaking with the browser's default voice",
+        starting: "Starting the browser's default voice",
+        usesVoice: "Uses the browser's default voice",
+        currentWord: "Current word",
+        speak: "Speak",
+        pause: "Pause",
+        resume: "Resume",
+        cancel: "Cancel",
+        download: "Download diagnostics",
+        timingTrace: "Timing trace",
+        measured: "What the browser has measured",
+        wordsMeasured: (measured: number, total: number) => `${measured} of ${total} words measured`,
+        boundaries: (count: number) => `${count} boundary events received`,
+        waitingStart: "Waiting for the browser voice to start",
+        speechError: "Browser speech could not start",
+        paused: "Speech and the glyph wipe are paused",
+        actualNote: "Actual time is recorded when the next word starts",
+        word: "Word",
+        predicted: "Predicted",
+        observed: "Observed",
+        difference: "Difference",
+        finalNotMeasured: "Not measured · final word has no next boundary",
+        boundaryNotMeasured: "Not measured · no usable next word boundary",
+        waitingBoundary: "Waiting for a following word boundary",
+        emptyTrace:
+          "Start speaking. The first completed word appears here when its following word boundary arrives.",
+        unavailable:
+          "Web Speech API is unavailable in this browser, so the live narration cannot start here.",
+      };
   const targetRef = useRef<HTMLParagraphElement>(null);
   const narratorRef = useRef<KaraokeNarrator | null>(null);
   const [state, setState] = useState<NarratorState | "ready">("ready");
@@ -182,23 +263,23 @@ export default function LiveDemo(): JSX.Element {
   );
   const timingStatus =
     state === "ended"
-      ? `${metrics.samples.length} of ${tokens.length} words measured`
+      ? copy.wordsMeasured(metrics.samples.length, tokens.length)
       : state === "speaking"
-        ? `${metrics.boundaries} boundary events received`
-        : state === "starting"
-          ? "Waiting for the browser voice to start"
-          : state === "error"
-            ? (reason ?? "Browser speech could not start")
-            : state === "paused"
-              ? "Speech and the glyph wipe are paused"
-              : "Actual time is recorded when the next word starts";
+        ? copy.boundaries(metrics.boundaries)
+      : state === "starting"
+          ? copy.waitingStart
+        : state === "error"
+            ? (reason ?? copy.speechError)
+          : state === "paused"
+              ? copy.paused
+              : copy.actualNote;
 
   return (
     <section className={styles.demo} aria-labelledby="live-demo-heading">
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Live speech example</p>
-          <h2 id="live-demo-heading">Press Speak. Keep your eyes on the caption.</h2>
+          <p className={styles.eyebrow}>{copy.liveExample}</p>
+          <h2 id="live-demo-heading">{copy.heading}</h2>
         </div>
         <span className={styles.state} data-state={state}>
           <WaveIcon /> {state}
@@ -206,17 +287,16 @@ export default function LiveDemo(): JSX.Element {
       </div>
 
       <p className={styles.description}>
-        The caption is the demo: one spoken word at a time fills inside its glyphs. The
-        timing record stays below after playback.
+        {copy.description}
       </p>
 
       {support === null ? (
-        <p className={styles.unsupported}>Checking browser speech support…</p>
+        <p className={styles.unsupported}>{copy.checking}</p>
       ) : support.supported ? (
         <>
           <div className={styles.setup}>
             <label className={styles.field}>
-              <span>English text to speak</span>
+              <span>{copy.textLabel}</span>
               <textarea
                 value={text}
                 onChange={(event) => setText(event.target.value)}
@@ -233,12 +313,12 @@ export default function LiveDemo(): JSX.Element {
               className={invalidText ? styles.inputError : styles.inputHint}
             >
               {invalidText
-                ? "This live demo supports English text only."
-                : "English text only. Japanese and other languages are outside the v0.1 support target."}
+                ? copy.invalidInput
+                : copy.inputHint}
             </p>
             <div className={styles.setupRow}>
               <label className={styles.field}>
-                <span>Speech rate: {rate.toFixed(1)}×</span>
+                <span>{copy.rate}: {rate.toFixed(1)}×</span>
                 <input
                   type="range"
                   min="0.5"
@@ -255,12 +335,7 @@ export default function LiveDemo(): JSX.Element {
           <div className={styles.playback} data-speaking={isSpeaking}>
             <WaveIcon />
             <strong>
-              {isSpeaking
-                ? "Speaking with"
-                : state === "starting"
-                  ? "Starting"
-                  : "Uses"}{" "}
-              the browser's default voice
+              {isSpeaking ? copy.speakingWith : state === "starting" ? copy.starting : copy.usesVoice}
             </strong>
             <span className={styles.elapsed}>{(elapsedMs / 1000).toFixed(2)} s</span>
           </div>
@@ -282,7 +357,7 @@ export default function LiveDemo(): JSX.Element {
           {isSpeaking ? (
             <div className={styles.progressPanel}>
               <div className={styles.currentWord}>
-                <span>Current word</span>
+                <span>{copy.currentWord}</span>
                 <strong>{metrics.activeWord}</strong>
               </div>
               <div
@@ -304,43 +379,43 @@ export default function LiveDemo(): JSX.Element {
               onClick={speak}
               disabled={!canSpeak}
             >
-              <WaveIcon /> Speak
+              <WaveIcon /> {copy.speak}
             </button>
             <button
               type="button"
               onClick={() => narratorRef.current?.pause()}
               disabled={!isSpeaking}
             >
-              Pause
+              {copy.pause}
             </button>
             <button
               type="button"
               onClick={() => narratorRef.current?.resume()}
               disabled={state !== "paused"}
             >
-              Resume
+              {copy.resume}
             </button>
             <button
               type="button"
               onClick={() => narratorRef.current?.cancel()}
               disabled={!isActive}
             >
-              Cancel
+              {copy.cancel}
             </button>
             <button
               type="button"
               onClick={downloadDiagnostics}
               disabled={!narratorRef.current}
             >
-              Download diagnostics
+              {copy.download}
             </button>
           </div>
 
           <section className={styles.trace} aria-labelledby="timing-trace-heading">
             <div className={styles.traceHeading}>
               <div>
-                <p>Timing trace</p>
-                <h3 id="timing-trace-heading">What the browser has measured</h3>
+                <p>{copy.timingTrace}</p>
+                <h3 id="timing-trace-heading">{copy.measured}</h3>
               </div>
               <span>{timingStatus}</span>
             </div>
@@ -349,10 +424,10 @@ export default function LiveDemo(): JSX.Element {
                 <table>
                   <thead>
                     <tr>
-                      <th scope="col">Word</th>
-                      <th scope="col">Predicted</th>
-                      <th scope="col">Observed</th>
-                      <th scope="col">Difference</th>
+                      <th scope="col">{copy.word}</th>
+                      <th scope="col">{copy.predicted}</th>
+                      <th scope="col">{copy.observed}</th>
+                      <th scope="col">{copy.difference}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -374,9 +449,9 @@ export default function LiveDemo(): JSX.Element {
                             <td className={styles.unmeasured} colSpan={3}>
                               {state === "ended"
                                 ? index === tokens.length - 1
-                                  ? "Not measured · final word has no next boundary"
-                                  : "Not measured · no usable next word boundary"
-                                : "Waiting for a following word boundary"}
+                                  ? copy.finalNotMeasured
+                                  : copy.boundaryNotMeasured
+                                : copy.waitingBoundary}
                             </td>
                           )}
                         </tr>
@@ -387,16 +462,14 @@ export default function LiveDemo(): JSX.Element {
               </div>
             ) : (
               <p className={styles.emptyTrace}>
-                Start speaking. The first completed word appears here when its following
-                word boundary arrives.
+                {copy.emptyTrace}
               </p>
             )}
           </section>
         </>
       ) : (
         <p className={styles.unsupported}>
-          {support.reason ??
-            "Web Speech API is unavailable in this browser, so the live narration cannot start here."}
+          {support.reason ?? copy.unavailable}
         </p>
       )}
     </section>

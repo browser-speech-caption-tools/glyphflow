@@ -9,7 +9,7 @@ hide_table_of_contents: true
 
 # GlyphFlow documentation
 
-GlyphFlow is a zero-runtime-dependency TypeScript library that speaks text with the Web Speech API and fills each caption word from left to right as it is spoken.
+GlyphFlow is a TypeScript library that speaks text with the Web Speech API and fills each caption word from left to right as it is spoken.
 
 <div className="gf-docs-hero-actions">
 

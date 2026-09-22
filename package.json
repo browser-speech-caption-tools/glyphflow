@@ -10,11 +10,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enumura1/glyphflow.git"
+    "url": "git+https://github.com/speech-caption-tools/glyphflow.git"
   },
-  "homepage": "https://github.com/enumura1/glyphflow#readme",
+  "homepage": "https://github.com/speech-caption-tools/glyphflow#readme",
   "bugs": {
-    "url": "https://github.com/enumura1/glyphflow/issues"
+    "url": "https://github.com/speech-caption-tools/glyphflow/issues"
   },
   "license": "MIT",
   "publishConfig": {

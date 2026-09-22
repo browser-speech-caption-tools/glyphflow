@@ -4,9 +4,9 @@ const config: Config = {
   title: "GlyphFlow",
   tagline: "Web Speech captions with a smooth word wipe",
   favicon: "img/favicon.svg",
-  url: "https://enumura1.github.io",
+  url: "https://speech-caption-tools.github.io",
   baseUrl: "/glyphflow/",
-  organizationName: "enumura1",
+  organizationName: "speech-caption-tools",
   projectName: "glyphflow",
   onBrokenLinks: "throw",
   i18n: {
@@ -34,7 +34,7 @@ const config: Config = {
         { to: "/docs", label: "Docs", position: "left" },
         { to: "/docs/getting-started", label: "Get started", position: "left" },
         {
-          href: "https://github.com/enumura1/glyphflow",
+          href: "https://github.com/speech-caption-tools/glyphflow",
           label: "GitHub",
           position: "right",
         },
@@ -55,7 +55,10 @@ const config: Config = {
         {
           title: "Project",
           items: [
-            { label: "GitHub", href: "https://github.com/enumura1/glyphflow" },
+            {
+              label: "GitHub",
+              href: "https://github.com/speech-caption-tools/glyphflow",
+            },
             { label: "Project scope", to: "/docs/project-scope" },
           ],
         },

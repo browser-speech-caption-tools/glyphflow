@@ -15,11 +15,11 @@ Small contributions are valuable. A clear issue or documentation correction is j
 
 Before opening an issue:
 
-1. Check the [troubleshooting guide](https://enumura1.github.io/glyphflow/docs/troubleshooting/) and confirm the behavior is within the current support target: Chrome Desktop, English text, and a voice that emits `word` boundary events.
-2. Search [existing issues](https://github.com/enumura1/glyphflow/issues) to avoid duplicates.
+1. Check the [troubleshooting guide](https://speech-caption-tools.github.io/glyphflow/docs/troubleshooting/) and confirm the behavior is within the current support target: Chrome Desktop, English text, and a voice that emits `word` boundary events.
+2. Search [existing issues](https://github.com/speech-caption-tools/glyphflow/issues) to avoid duplicates.
 3. Reproduce the problem with the latest released package or the current `main` branch when practical.
 
-Use the [bug report form](https://github.com/enumura1/glyphflow/issues/new?template=bug_report.yml). It asks for the information needed to investigate a browser-speech problem:
+Use the [bug report form](https://github.com/speech-caption-tools/glyphflow/issues/new?template=bug_report.yml). It asks for the information needed to investigate a browser-speech problem:
 
 - a short description and reproducible steps;
 - expected and actual behavior;

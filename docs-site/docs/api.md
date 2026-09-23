@@ -28,4 +28,4 @@ Returns an object with `speak()`, `pause()`, `resume()`, `cancel()`, `getDiagnos
 
 ## Styling
 
-Import `@enumura1/glyphflow/styles.css`. Override `--kn-highlight-color`, `--kn-unhighlight-color`, font, size, and spacing in application CSS.
+Import `@enumura/glyphflow/styles.css`. Override `--kn-highlight-color`, `--kn-unhighlight-color`, font, size, and spacing in application CSS.

@@ -1,5 +1,5 @@
 {
-  "name": "@enumura1/glyphflow",
+  "name": "@enumura/glyphflow",
   "version": "1.0.0",
   "description": "Browser Web Speech narration with smoothly wiping inside-glyph captions.",
   "keywords": [

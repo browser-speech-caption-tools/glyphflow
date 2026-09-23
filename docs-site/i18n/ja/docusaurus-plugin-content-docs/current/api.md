@@ -28,4 +28,4 @@ title: API
 
 ## スタイル
 
-`@enumura1/glyphflow/styles.css`をimportしてください。`--kn-highlight-color`、`--kn-unhighlight-color`、フォント、サイズ、余白はアプリケーション側で上書きできます。
+`@enumura/glyphflow/styles.css`をimportしてください。`--kn-highlight-color`、`--kn-unhighlight-color`、フォント、サイズ、余白はアプリケーション側で上書きできます。

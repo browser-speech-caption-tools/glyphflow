@@ -125,7 +125,7 @@ export default function Home(): JSX.Element {
               </a>
             </div>
             <pre className={styles.install}>
-              <code>npm install @enumura1/glyphflow</code>
+              <code>npm install @enumura/glyphflow</code>
             </pre>
           </div>
 

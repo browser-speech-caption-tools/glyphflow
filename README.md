@@ -15,12 +15,12 @@
 ## Install
 
 ```sh
-npm install @enumura1/glyphflow
+npm install @enumura/glyphflow
 ```
 
 ```ts
-import { createKaraokeNarrator } from "@enumura1/glyphflow";
-import "@enumura1/glyphflow/styles.css";
+import { createKaraokeNarrator } from "@enumura/glyphflow";
+import "@enumura/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a karaoke caption.",

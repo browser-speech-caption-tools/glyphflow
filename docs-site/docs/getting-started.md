@@ -6,14 +6,14 @@ title: Getting started
 ## Install
 
 ```sh
-npm install @enumura1/glyphflow
+npm install @enumura/glyphflow
 ```
 
 Import the API and stylesheet from your application entry point.
 
 ```ts
-import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura1/glyphflow";
-import "@enumura1/glyphflow/styles.css";
+import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura/glyphflow";
+import "@enumura/glyphflow/styles.css";
 ```
 
 ## Create a caption target
@@ -61,7 +61,7 @@ Calling `speak()` again cancels the active session and starts a fresh one. Call 
 The browser may load its voice list asynchronously. `getVoices()` therefore returns an empty array until voices are ready. Refresh your own UI when the browser dispatches `voiceschanged`.
 
 ```ts
-import { getVoices } from "@enumura1/glyphflow";
+import { getVoices } from "@enumura/glyphflow";
 
 function refreshVoices() {
   const englishVoices = getVoices().filter((voice) => voice.lang.startsWith("en"));

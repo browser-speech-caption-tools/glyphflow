@@ -1,12 +1,12 @@
 {
   "name": "@enumura1/glyphflow",
-  "version": "0.1.0",
-  "description": "Browser Web Speech narration with smoothly wiping karaoke captions.",
+  "version": "1.0.0",
+  "description": "Browser Web Speech narration with smoothly wiping inside-glyph captions.",
   "keywords": [
     "speech-synthesis",
     "web-speech-api",
     "captions",
-    "karaoke"
+    "text-animation"
   ],
   "repository": {
     "type": "git",

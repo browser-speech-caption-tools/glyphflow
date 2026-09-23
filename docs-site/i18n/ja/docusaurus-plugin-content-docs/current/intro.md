@@ -52,12 +52,12 @@ GlyphFlowは、Web Speech APIで文章を読み上げながら、読み上げ中
 ## クイックスタート
 
 ```sh
-npm install @enumura1/glyphflow
+npm install @enumura/glyphflow
 ```
 
 ```ts
-import { createKaraokeNarrator } from "@enumura1/glyphflow";
-import "@enumura1/glyphflow/styles.css";
+import { createKaraokeNarrator } from "@enumura/glyphflow";
+import "@enumura/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a caption.",

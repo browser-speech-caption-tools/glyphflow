@@ -13,7 +13,7 @@ Web Speech APIに対応していても、選択したvoiceが利用可能な単�
 
 ## 音声は聞こえるが字幕が動かない
 
-`@enumura1/glyphflow/styles.css`をimportしたか、選択したvoiceが単語境界を返すかを確認してください。音声終了後に`unsupported`になる場合は境界がないvoiceです。
+`@enumura/glyphflow/styles.css`をimportしたか、選択したvoiceが単語境界を返すかを確認してください。音声終了後に`unsupported`になる場合は境界がないvoiceです。
 
 ## 音声が開始されない
 

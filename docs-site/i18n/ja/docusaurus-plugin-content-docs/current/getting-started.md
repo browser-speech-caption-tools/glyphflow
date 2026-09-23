@@ -6,14 +6,14 @@ title: 使い始める
 ## インストール
 
 ```sh
-npm install @enumura1/glyphflow
+npm install @enumura/glyphflow
 ```
 
 アプリケーションのエントリーポイントからAPIとstylesheetをimportします。
 
 ```ts
-import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura1/glyphflow";
-import "@enumura1/glyphflow/styles.css";
+import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura/glyphflow";
+import "@enumura/glyphflow/styles.css";
 ```
 
 ## 字幕の描画先を用意する
@@ -61,7 +61,7 @@ narrator.speak();
 ブラウザがvoice一覧を非同期で準備することがあります。そのため`getVoices()`は準備前には空配列を返します。`voiceschanged`イベントでUIを更新してください。
 
 ```ts
-import { getVoices } from "@enumura1/glyphflow";
+import { getVoices } from "@enumura/glyphflow";
 
 function refreshVoices() {
   const englishVoices = getVoices().filter((voice) => voice.lang.startsWith("en"));

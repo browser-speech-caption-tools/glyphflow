@@ -13,7 +13,7 @@ The browser may support Web Speech but the selected voice may not emit usable `w
 
 ## I hear speech but the caption does not move
 
-Confirm that you imported `@enumura1/glyphflow/styles.css` and that the selected voice emits word boundaries. The `unsupported` state after speech ends identifies a boundary-free voice.
+Confirm that you imported `@enumura/glyphflow/styles.css` and that the selected voice emits word boundaries. The `unsupported` state after speech ends identifies a boundary-free voice.
 
 ## Speech does not start
 

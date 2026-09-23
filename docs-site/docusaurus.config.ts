@@ -4,9 +4,9 @@ const config: Config = {
   title: "GlyphFlow",
   tagline: "Web Speech captions with a smooth word wipe",
   favicon: "img/favicon.svg",
-  url: "https://speech-caption-tools.github.io",
+  url: "https://speech-caption.github.io",
   baseUrl: "/glyphflow/",
-  organizationName: "speech-caption-tools",
+  organizationName: "speech-caption",
   projectName: "glyphflow",
   onBrokenLinks: "throw",
   i18n: {
@@ -34,7 +34,7 @@ const config: Config = {
         { to: "/docs", label: "Docs", position: "left" },
         { to: "/docs/getting-started", label: "Get started", position: "left" },
         {
-          href: "https://github.com/speech-caption-tools/glyphflow",
+          href: "https://github.com/speech-caption/glyphflow",
           label: "GitHub",
           position: "right",
         },
@@ -57,7 +57,7 @@ const config: Config = {
           items: [
             {
               label: "GitHub",
-              href: "https://github.com/speech-caption-tools/glyphflow",
+              href: "https://github.com/speech-caption/glyphflow",
             },
             { label: "Project scope", to: "/docs/project-scope" },
           ],

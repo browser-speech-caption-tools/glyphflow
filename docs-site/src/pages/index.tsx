@@ -119,7 +119,7 @@ export default function Home(): JSX.Element {
               </Link>
               <a
                 className={styles.secondaryAction}
-                href="https://github.com/speech-caption-tools/glyphflow"
+                href="https://github.com/speech-caption/glyphflow"
               >
                 {copy.github}
               </a>

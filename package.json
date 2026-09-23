@@ -10,11 +10,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/speech-caption-tools/glyphflow.git"
+    "url": "git+https://github.com/speech-caption/glyphflow.git"
   },
-  "homepage": "https://github.com/speech-caption-tools/glyphflow#readme",
+  "homepage": "https://github.com/speech-caption/glyphflow#readme",
   "bugs": {
-    "url": "https://github.com/speech-caption-tools/glyphflow/issues"
+    "url": "https://github.com/speech-caption/glyphflow/issues"
   },
   "license": "MIT",
   "publishConfig": {

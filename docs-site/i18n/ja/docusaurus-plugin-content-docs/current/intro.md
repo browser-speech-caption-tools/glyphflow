@@ -57,7 +57,6 @@ npm install @enumura/glyphflow
 
 ```ts
 import { createKaraokeNarrator } from "@enumura/glyphflow";
-import "@enumura/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a caption.",
@@ -67,7 +66,7 @@ const narrator = createKaraokeNarrator({
 narrator.speak();
 ```
 
-ライブラリが`target`の中に字幕用のspanを描画します。CSSを一度importし、色や書体はアプリケーション側で上書きしてください。
+ライブラリが`target`の中に字幕用のspanを描画します。標準CSSはpackage importに含まれます。色や書体は、アプリケーション側のCSSを後から読み込んで上書きしてください。
 
 ## 向いている用途
 

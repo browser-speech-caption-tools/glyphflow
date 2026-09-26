@@ -57,7 +57,6 @@ npm install @enumura/glyphflow
 
 ```ts
 import { createKaraokeNarrator } from "@enumura/glyphflow";
-import "@enumura/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a caption.",
@@ -67,7 +66,8 @@ const narrator = createKaraokeNarrator({
 narrator.speak();
 ```
 
-The library renders its own spans inside `target`. Import the included CSS once, then override colors and typography in your application stylesheet.
+The library renders its own spans inside `target`, and the package import includes
+the default CSS. Override colors and typography in your application stylesheet.
 
 ```css
 .kn-word {

@@ -20,7 +20,6 @@ npm install @enumura/glyphflow
 
 ```ts
 import { createKaraokeNarrator } from "@enumura/glyphflow";
-import "@enumura/glyphflow/styles.css";
 
 const narrator = createKaraokeNarrator({
   text: "This is a karaoke caption.",
@@ -34,9 +33,17 @@ Call `pause()`, `resume()`, `cancel()`, `getDiagnostics()`, or `destroy()` on th
 
 ## CSS customization
 
-The library only sets `--kn-progress` inline. Override its appearance normally:
+The default stylesheet is included by the package import. The library only sets
+`--kn-progress` inline. To customize the appearance, import your own stylesheet
+after GlyphFlow and override its classes or variables:
+
+```ts
+import { createKaraokeNarrator } from "@enumura/glyphflow";
+import "./my-caption.css";
+```
 
 ```css
+/* my-caption.css — your application's filename is arbitrary */
 .kn-word {
   --kn-highlight-color: #fff3b0;
   --kn-unhighlight-color: #736a55;

@@ -13,7 +13,9 @@ The browser may support Web Speech but the selected voice may not emit usable `w
 
 ## I hear speech but the caption does not move
 
-Confirm that you imported `@enumura/glyphflow/styles.css` and that the selected voice emits word boundaries. The `unsupported` state after speech ends identifies a boundary-free voice.
+Confirm that application CSS does not override GlyphFlow's caption styles and
+that the selected voice emits word boundaries. The `unsupported` state after
+speech ends identifies a boundary-free voice.
 
 ## Speech does not start
 
@@ -27,7 +29,10 @@ The browser exposes one shared speech queue. GlyphFlow uses `speechSynthesis.can
 
 ## The wipe is not visually correct
 
-Start with the bundled stylesheet, then check application CSS for rules that override `background-clip`, `-webkit-text-fill-color`, or the `--kn-progress` property. Use the [Customization](./customization) guide as a known-good base.
+The default stylesheet is included automatically. Check application CSS for rules
+that override `background-clip`, `-webkit-text-fill-color`, or the
+`--kn-progress` property. Use the [Customization](./customization) guide as a
+known-good base.
 
 ## I found a bug
 

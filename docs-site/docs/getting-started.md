@@ -9,11 +9,11 @@ title: Getting started
 npm install @enumura/glyphflow
 ```
 
-Import the API and stylesheet from your application entry point.
+Import the API from your application entry point. The package includes its
+default caption stylesheet automatically.
 
 ```ts
 import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura/glyphflow";
-import "@enumura/glyphflow/styles.css";
 ```
 
 ## Create a caption target

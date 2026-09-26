@@ -9,11 +9,10 @@ title: 使い始める
 npm install @enumura/glyphflow
 ```
 
-アプリケーションのエントリーポイントからAPIとstylesheetをimportします。
+アプリケーションのエントリーポイントからAPIをimportします。標準の字幕CSSは、このpackage importに含まれます。
 
 ```ts
 import { createKaraokeNarrator, getSpeechSynthesisSupport } from "@enumura/glyphflow";
-import "@enumura/glyphflow/styles.css";
 ```
 
 ## 字幕の描画先を用意する

@@ -13,7 +13,7 @@ Web Speech APIに対応していても、選択したvoiceが利用可能な単�
 
 ## 音声は聞こえるが字幕が動かない
 
-`@enumura/glyphflow/styles.css`をimportしたか、選択したvoiceが単語境界を返すかを確認してください。音声終了後に`unsupported`になる場合は境界がないvoiceです。
+アプリケーション側のCSSがGlyphFlowの字幕スタイルを上書きしていないか、選択したvoiceが単語境界を返すかを確認してください。音声終了後に`unsupported`になる場合は境界がないvoiceです。
 
 ## 音声が開始されない
 
@@ -27,7 +27,7 @@ Web Speech APIに対応していても、選択したvoiceが利用可能な単�
 
 ## ワイプの見た目が正しくない
 
-まず付属stylesheetを使い、アプリケーションのCSSが`background-clip`、`-webkit-text-fill-color`、`--kn-progress`を上書きしていないか確認してください。[カスタマイズ](./customization)を正常系の基準にできます。
+標準stylesheetは自動で読み込まれます。アプリケーションのCSSが`background-clip`、`-webkit-text-fill-color`、`--kn-progress`を上書きしていないか確認してください。[カスタマイズ](./customization)を正常系の基準にできます。
 
 ## バグを見つけた
 

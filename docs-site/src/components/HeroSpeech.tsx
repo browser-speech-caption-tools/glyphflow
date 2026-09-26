@@ -6,8 +6,7 @@ import {
   getSpeechSynthesisSupport,
   type KaraokeNarrator,
   type NarratorState,
-} from "../../../src/index";
-import "../../../src/styles.css";
+} from "../../../src/index.browser";
 
 import { claimSpeech, releaseSpeech } from "./speech-session";
 import styles from "./HeroSpeech.module.css";

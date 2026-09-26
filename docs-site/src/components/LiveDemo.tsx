@@ -8,8 +8,7 @@ import {
   type NarratorState,
   type SpeechSynthesisSupport,
   type WordTimingSample,
-} from "../../../src/index";
-import "../../../src/styles.css";
+} from "../../../src/index.browser";
 import { tokenize } from "../../../src/core/tokenizer";
 
 import { claimSpeech, releaseSpeech } from "./speech-session";

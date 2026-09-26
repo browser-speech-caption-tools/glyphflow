@@ -4,8 +4,7 @@ import {
   getVoices,
   type KaraokeNarrator,
   type WordTimingSample,
-} from "../../src/index";
-import "../../src/styles.css";
+} from "@enumura/glyphflow";
 import "./style.css";
 
 const byId = <T extends HTMLElement>(id: string) =>

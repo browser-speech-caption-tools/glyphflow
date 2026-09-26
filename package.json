@@ -1,6 +1,6 @@
 {
   "name": "@enumura/glyphflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Browser Web Speech narration with smoothly wiping inside-glyph captions.",
   "keywords": [
     "speech-synthesis",
@@ -29,7 +29,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "browser": "./dist/index.browser.js",
+      "node": "./dist/index.js",
+      "import": "./dist/index.browser.js"
     },
     "./styles.css": "./dist/styles.css"
   },
@@ -42,10 +44,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsup && cp src/styles.css dist/styles.css",
+    "build": "tsup && node scripts/verify-package-entry.mjs",
     "prepack": "npm run build",
     "lint": "oxlint --deny-warnings",
-    "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" tsup.config.ts .oxlintrc.json",
+    "format:check": "prettier --check \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"examples/basic/**/*.{ts,css,html}\" \"scripts/**/*.mjs\" tsup.config.ts .oxlintrc.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "demo": "vite --config examples/basic/vite.config.ts",
